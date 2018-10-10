@@ -56,22 +56,22 @@ int commonChild(string s1, string s2) {
 
     int m = s1.length() - 1; 
     int n = s2.length() - 1; 
-    //printf("RJ_DBG: m=%d, n=%d\n", m, n);
+    //printf("DBG: m=%d, n=%d\n", m, n);
     
     ++g_num_cmp;
     if (s1[m] == s2[n]) memo[m][n] = 1;
-    //printf("RJ_DBG: memo[m][n]=%d\n", memo[m][n]);
+    //printf("DBG: memo[m][n]=%d\n", memo[m][n]);
     for (int i = m-1; i >= 0; --i) {
         ++g_num_cmp;
         if (s1[i] == s2[n]) memo[i][n] = 1;
         else memo[i][n] = memo[i+1][n];
-        //printf("RJ_DBG: memo[%d][n]=%d\n", i, memo[i][n]);
+        //printf("DBG: memo[%d][n]=%d\n", i, memo[i][n]);
     }
     for (int j = n-1; j >= 0; --j) {
         ++g_num_cmp;
         if (s1[m] == s2[j]) memo[m][j] = 1;
         else memo[m][j] = memo[m][j+1];
-        //printf("RJ_DBG: memo[m][%d]=%d\n", j, memo[m][j]);
+        //printf("DBG: memo[m][%d]=%d\n", j, memo[m][j]);
     }
 
     for (int i = m - 1; i >= 0; --i) {
@@ -79,11 +79,11 @@ int commonChild(string s1, string s2) {
             ++g_num_cmp;
             if (s1[i] == s2[j]) {
                 memo[i][j] = memo[i+1][j+1] + 1;
-                //printf("RJ_DBG: case equal -> memo[%d][%d]=%d + 1\n", i, j, memo[i+1][j+1], memo[i][j]);
+                //printf("DBG: case equal -> memo[%d][%d]=%d + 1\n", i, j, memo[i+1][j+1], memo[i][j]);
             }
             memo[i][j] = max(memo[i][j], memo[i][j+1]);
             memo[i][j] = max(memo[i][j], memo[i+1][j]);
-            //printf("RJ_DBG: memo[%d][%d]=%d\n", i, j, memo[i][j]);
+            //printf("DBG: memo[%d][%d]=%d\n", i, j, memo[i][j]);
         }
     }
 
@@ -108,7 +108,7 @@ int main()
 
     fout.close();
 
-    printf("RJ_DBG: cmp: %lld, rec: %lld\n", g_num_cmp, g_num_rec);
+    printf("DBG: cmp: %lld, rec: %lld\n", g_num_cmp, g_num_rec);
     return 0;
 }
 

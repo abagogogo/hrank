@@ -20,20 +20,20 @@ string abbreviation(string a, string b) {
         memo[i][n] = match(a[i], b[n]) && remain_lower;
         memo[i][n] = memo[i][n] || (islower(a[i]) && memo[i+1][n]);
         remain_lower = remain_lower && islower(a[i]); 
-        printf("RJ_DBG: memo[%d][n]: %s\n", i, (memo[i][n] ? "true" : "false"));
+        printf("DBG: memo[%d][n]: %s\n", i, (memo[i][n] ? "true" : "false"));
     }
     /*
     for (int j = n - 1; j >= 0; --j) {
         memo[m][j] = match(a[m], b[j]) && (memo[m][j+1] == false);
         memo[m][j] = memo[m][j] || (islower(b[j]) && memo[m][j+1]);
-        printf("RJ_DBG: memo[m][%d]: %s\n", j, (memo[m][j] ? "true" : "false"));
+        printf("DBG: memo[m][%d]: %s\n", j, (memo[m][j] ? "true" : "false"));
     }
     */
     for (int i = m - 1; i >= 0; --i) {
         for (int j = n - 1; j >= 0; --j) {
             memo[i][j] = match(a[i], b[j]) && memo[i+1][j+1];
             memo[i][j] = memo[i][j] || (islower(a[i]) && memo[i+1][j]);
-            printf("RJ_DBG: memo[%d][%d]: %s\n", i, j, (memo[i][j] ? "true" : "false"));
+            printf("DBG: memo[%d][%d]: %s\n", i, j, (memo[i][j] ? "true" : "false"));
         }
     }
     printf("memo[0][0]: %s\n", (memo[0][0] ? "YES" : "NO"));

@@ -120,10 +120,10 @@ struct Node {
 
     void dfs_sum(vector<long> &sum) {
         sum[id] = val;
-        //printf("RJ_DBG: visiting id=%d, sum=%d\n", id, sum[id]);
+        //printf("DBG: visiting id=%d, sum=%d\n", id, sum[id]);
         for (auto p : adj) {
             if (sum[p->id] == 0) {
-                //printf("RJ_DBG: from id=%d to p->id=%d\n", id, p->id);
+                //printf("DBG: from id=%d to p->id=%d\n", id, p->id);
                 p->parent = this;
                 p->dfs_sum(sum);
                 sum[id] += sum[p->id];
@@ -158,7 +158,7 @@ int balancedForest(vector<int> c, vector<vector<int>> edges) {
     Node *root = &g[1];
     vector<long> sum(g.size(), 0);
     root->dfs_sum(sum);
-    //for (int i = 0; i < sum.size(); ++i) printf("RJ_DBG: sum[%d] = %d\n", i, sum[i]);
+    //for (int i = 0; i < sum.size(); ++i) printf("DBG: sum[%d] = %d\n", i, sum[i]);
 
     // Iterate 2 edges combinations
     int min_val = INT_MAX;
@@ -177,19 +177,19 @@ int balancedForest(vector<int> c, vector<vector<int>> edges) {
                 r_sum = sum[root->id] - sum[i1->id];
                 j_sum = sum[j1->id];
                 i_sum = sum[i1->id] - j_sum;
-                // printf("RJ_DBG: case 1 j1(%d) is offspring of i1(%d)\n", j1->id, i1->id);
+                // printf("DBG: case 1 j1(%d) is offspring of i1(%d)\n", j1->id, i1->id);
             } else if (i1->is_offspring(j1)) {
                 r_sum = sum[root->id] - sum[j1->id];
                 i_sum = sum[i1->id];
                 j_sum = sum[j1->id] - i_sum;
-                // printf("RJ_DBG: case 2 i1(%d) is offspring of j1(%d)\n", i1->id, j1->id);
+                // printf("DBG: case 2 i1(%d) is offspring of j1(%d)\n", i1->id, j1->id);
             } else {
                 i_sum = sum[i1->id];
                 j_sum = sum[j1->id];
                 r_sum = sum[root->id] - i_sum - j_sum;
-                // printf("RJ_DBG: case 3 i1(%d), i1(%d)\n", i1->id, j1->id);
+                // printf("DBG: case 3 i1(%d), i1(%d)\n", i1->id, j1->id);
             }
-            // printf("RJ_DBG: r_sum=%d, i_sum=%d, j_sum=%d\n", r_sum, i_sum, j_sum);
+            // printf("DBG: r_sum=%d, i_sum=%d, j_sum=%d\n", r_sum, i_sum, j_sum);
 
             // calcuate new node val.
             if (r_sum == i_sum && i_sum >= j_sum) {
@@ -201,7 +201,7 @@ int balancedForest(vector<int> c, vector<vector<int>> edges) {
             }
         }
     }
-    //printf("RJ_DBG: min_val=%d\n", min_val);
+    //printf("DBG: min_val=%d\n", min_val);
     return (min_val == INT_MAX) ? -1 : min_val;
 }
 #endif

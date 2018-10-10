@@ -13,7 +13,7 @@ long substrCount(string &str, int len) {
         for (int j = 0; j < len; ++j) {
             if (str[i + j] != str[i]) {
                 if ((len % 2 == 0) || (j != (len / 2))) {
-                    printf("RJ_DBG: len=%d, i=%d, j=%d => break\n", len, i, j);
+                    printf("DBG: len=%d, i=%d, j=%d => break\n", len, i, j);
                     valid = false;
                     break;
                 }
@@ -21,11 +21,11 @@ long substrCount(string &str, int len) {
         }
         if (valid) {
             ++valid_cnt;
-            printf("RJ_DBG: len=%d, i=%d is valid\n", len, i);
+            printf("DBG: len=%d, i=%d is valid\n", len, i);
         }
     }
 
-    printf("RJ_DBG: len=%d valid_cnt=%d\n", len, valid_cnt);
+    printf("DBG: len=%d valid_cnt=%d\n", len, valid_cnt);
     return valid_cnt + substrCount(str, len - 1);
 }
 
@@ -37,7 +37,7 @@ long substrCount(int n, string s) {
         if (it->second > max_freq) max_freq = it->second;
     
     int cnt = substrCount(s, max_freq + 1);
-    printf("RJ_DBG: total count = %d\n", cnt);
+    printf("DBG: total count = %d\n", cnt);
     return cnt;
 }
 #else if 0 // O(n^2)

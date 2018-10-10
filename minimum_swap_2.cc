@@ -12,7 +12,7 @@ int partition(vector<int> &arr, int start, int end, int &num_swaps) {
     int i = start - 1;
     for (int j = start; j < end; ++j) {
         if (arr[j] <= pivot) {
-            printf("RJ_DBG: i=%d, j=%d, start=%d, end=%d, a[j]=%d, pivot=%d\n", i, j , start, end, arr[j], pivot);
+            printf("DBG: i=%d, j=%d, start=%d, end=%d, a[j]=%d, pivot=%d\n", i, j , start, end, arr[j], pivot);
             ++i;
             if (arr[i] > pivot) {
                 swap(arr[i], arr[j]);
@@ -22,10 +22,10 @@ int partition(vector<int> &arr, int start, int end, int &num_swaps) {
     }
 
     if (i + 1 != end) {
-        printf("RJ_DBG: i+1=%d, end=%d pivot=%d\n", i + 1, end, pivot);
+        printf("DBG: i+1=%d, end=%d pivot=%d\n", i + 1, end, pivot);
         ++num_swaps;
     }
-    printf("RJ_DBG: num_swaps = %d\n",  num_swaps);
+    printf("DBG: num_swaps = %d\n",  num_swaps);
     arr[end] = arr[i + 1];
     arr[i + 1] = pivot;
     
@@ -39,7 +39,7 @@ int qsort(vector<int> &arr, int start, int end) {
     int mid = partition(arr, start, end, num_swaps);
     num_swaps += qsort(arr, start, mid - 1);
     num_swaps += qsort(arr, mid + 1, end);
-    printf("RJ_DBG: return num_swaps = %d\n",  num_swaps);
+    printf("DBG: return num_swaps = %d\n",  num_swaps);
     return num_swaps;
 }
 int minimumSwaps(vector<int> arr) {
@@ -50,14 +50,14 @@ int minimumSwaps(vector<int> arr) {
     int cnt = 0;
     int i = 0;
     while (i < arr.size()) {
-        printf("RJ_DBG: i=%d, arr[i]=%d\n", i, arr[i]);
+        printf("DBG: i=%d, arr[i]=%d\n", i, arr[i]);
         if (arr[i] == i+1 || i == arr.size() -1) {
             ++i;
         } else {
             int idx = arr[i] - 1;
-            printf("RJ_DBG: swaping i=%d, with idx=%d\n", i, idx);
+            printf("DBG: swaping i=%d, with idx=%d\n", i, idx);
             swap(arr[i], arr[idx]);
-            printf("RJ_DBG: a[i]=%d, arr[idx]=%d\n", arr[i], arr[idx]);
+            printf("DBG: a[i]=%d, arr[idx]=%d\n", arr[i], arr[idx]);
             ++cnt;
         }
         if (cnt > 10) break;

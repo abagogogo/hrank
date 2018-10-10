@@ -85,7 +85,7 @@ int minimumMoves(vector<string> grid, int startX, int startY, int goalX, int goa
     new_move.pos.y = startY;
     new_move.dir = 0;
     new_move.step = grid.size();
-    printf("<RJ_DBG> push pos=%d, %d, dir=%d, step=%d\n", new_move.pos.x, new_move.pos.y, new_move.dir, new_move.step);
+    printf("<DBG> push pos=%d, %d, dir=%d, step=%d\n", new_move.pos.x, new_move.pos.y, new_move.dir, new_move.step);
     s.push_back(new_move);
 
     while (!s.empty()) {
@@ -93,27 +93,27 @@ int minimumMoves(vector<string> grid, int startX, int startY, int goalX, int goa
 
         Pos next_pos;
         if (m.next(grid.size(), next_pos)) {
-            printf("<RJ_DBG> checking pos=%d, %d, dir=%d , step=%d => new_pos=%d, %d\n", m.pos.x, m.pos.y, m.dir, m.step, next_pos.x, next_pos.y);
+            printf("<DBG> checking pos=%d, %d, dir=%d , step=%d => new_pos=%d, %d\n", m.pos.x, m.pos.y, m.dir, m.step, next_pos.x, next_pos.y);
             if (is_valid(grid, m.pos, next_pos) && is_new_step(next_pos, s)) {
                 if (next_pos.x == goalX && next_pos.y == goalY) {
                     min_moves = min((int)s.size(), min_moves);
-                    printf("<RJ_DBG> Valid and end => #moves=%d\n", s.size());
+                    printf("<DBG> Valid and end => #moves=%d\n", s.size());
                     s.pop_back();
                 } else {
                     new_move.pos.x = next_pos.x;
                     new_move.pos.y = next_pos.y;
                     new_move.dir = 0;
                     new_move.step = grid.size();
-                    printf("<RJ_DBG> Valid and push pos=%d, %d, dir=%d, step=%d\n", new_move.pos.x, new_move.pos.y, new_move.dir, new_move.step);
+                    printf("<DBG> Valid and push pos=%d, %d, dir=%d, step=%d\n", new_move.pos.x, new_move.pos.y, new_move.dir, new_move.step);
                     s.push_back(new_move);
                 }
             }
         } else {
-            printf("<RJ_DBG> pop for all move dir=%d and step=%d have been tried. stack size=%d\n", m.dir, m.step, s.size());
+            printf("<DBG> pop for all move dir=%d and step=%d have been tried. stack size=%d\n", m.dir, m.step, s.size());
             s.pop_back();
         } 
     }
-    printf("<RJ_DBG> min #moves=%d\n", min_moves);
+    printf("<DBG> min #moves=%d\n", min_moves);
     return min_moves;
 }
 #else // BFS

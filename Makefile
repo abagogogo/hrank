@@ -6,7 +6,7 @@ default: run
 
 $(LATEST_EXE): $(LATEST_CPP)
 	@echo "---- Compiling $< ----"	
-	g++ -std=c++0x -o $@ $<
+	g++ -g -std=c++0x -o $@ $<
 	@echo "---- Output: $@ ----"	
 
 run: $(LATEST_EXE)

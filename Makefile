@@ -6,7 +6,7 @@ default: run
 
 $(LATEST_EXE): $(LATEST_CPP)
 	@echo "---- Compiling $< ----"	
-	g++ -g -std=c++0x -o $@ $<
+	g++ -std=c++0x -g -o $@ $<
 	@echo "---- Output: $@ ----"	
 
 run: $(LATEST_EXE)
@@ -20,3 +20,4 @@ clean:
 	rm -f *~
 	rm -f a.out
 	rm -f core
+	rm -f .*.un~

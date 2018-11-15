@@ -48,7 +48,7 @@ int commonChild(string s1, string s2) {
     map<string, int> memo;
     return childs(shorter, longer, 0, 0, freqs_l, memo);
 }
-#else // DP
+#elif 0 // memoization (top-down)
 int commonChild(string s1, string s2) {
     if (s1.length() == 0 || s2.length() == 0) return 0;
 
@@ -89,6 +89,25 @@ int commonChild(string s1, string s2) {
 
     printf(" memo[0][0] = %d\n", memo[0][0]);
     return memo[0][0];
+}
+#else // DP (bottom-up)
+int commonChild(string s1, string s2) {
+    int m = s1.length();
+    int n = s2.length();
+    if (m == 0 || n == 0) return 0;
+
+    vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (s1[i] == s2[j]) {
+                dp[i+1][j+1] = dp[i][j] + 1;
+            } else {
+                dp[i+1][j+1] = max(dp[i+1][j], dp[i][j+1]);                  
+            }
+        }
+    }
+    return dp[m][n];
 }
 #endif
 

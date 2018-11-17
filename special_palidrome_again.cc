@@ -3,44 +3,7 @@
 using namespace std;
 
 // Complete the substrCount function below.
-#if 0 // Timeout
-long substrCount(string &str, int len) {
-    if (str.length() == 0 || len <= 0) return 0;
-
-    long valid_cnt = 0;
-    for (int i = 0; i + len <= str.length(); ++i) {
-        bool valid = true;
-        for (int j = 0; j < len; ++j) {
-            if (str[i + j] != str[i]) {
-                if ((len % 2 == 0) || (j != (len / 2))) {
-                    printf("DBG: len=%d, i=%d, j=%d => break\n", len, i, j);
-                    valid = false;
-                    break;
-                }
-            }
-        }
-        if (valid) {
-            ++valid_cnt;
-            printf("DBG: len=%d, i=%d is valid\n", len, i);
-        }
-    }
-
-    printf("DBG: len=%d valid_cnt=%d\n", len, valid_cnt);
-    return valid_cnt + substrCount(str, len - 1);
-}
-
-long substrCount(int n, string s) {
-    map<char,int> freqs;
-    int max_freq = 0;
-    for (auto ch : s) freqs[ch]++;
-    for (auto it = freqs.begin(); it != freqs.end(); ++it) 
-        if (it->second > max_freq) max_freq = it->second;
-    
-    int cnt = substrCount(s, max_freq + 1);
-    printf("DBG: total count = %d\n", cnt);
-    return cnt;
-}
-#else if 0 // O(n^2)
+#if 0 // O(n^2)
     static long substrCount(string s)
     {
         long retVal = s.Length;
@@ -69,7 +32,8 @@ long substrCount(int n, string s) {
         }
         return retVal;
     }
-#else // one parse
+#endif
+#if 1 // one parse
 static long substrCount(int n, String s) {
     // initialize counter to n because each character is a
     // palindromic string
@@ -123,6 +87,35 @@ static long substrCount(int n, String s) {
         }
     }
     return counter;
+}
+#else // O(n): 2-pass, reduce and count.
+long substrCount(int n, string s) {
+    if (n == 0) return 0;
+
+    long cnt = n;
+    vector<char> uni_s;
+    unordered_map<long, long> uni_cnt;
+
+    uni_s.push_back(s[0]);
+    uni_cnt[uni_s.size() - 1] = 1;
+    for (int i = 1; i < n; ++i) {
+        if (s[i] == s[i-1]) {
+            cnt += uni_cnt[uni_s.size() - 1];
+            uni_cnt[uni_s.size() - 1]++;            
+        } else {
+            uni_s.push_back(s[i]);
+            uni_cnt[uni_s.size() - 1] = 1;
+        }
+    }
+
+    for (int i = 1; i < uni_s.size(); ++i) {
+        if (uni_cnt[i] == 1 && i + 1 < uni_s.size()) {
+            if (uni_s[i - 1] == uni_s[i + 1]) {
+                cnt += min(uni_cnt[i-1], uni_cnt[i+1]);
+            }
+        }
+    }
+    return cnt;
 }
 #endif
 

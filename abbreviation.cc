@@ -7,39 +7,7 @@ bool match(char a, char b) {
     return (a == b) || (toupper(a) == b);
 }
 
-#if 1 // DP
-string abbreviation(string a, string b) {
-    int m = a.length() - 1;
-    int n = b.length() - 1;    
-
-    vector<vector<bool>> memo(m + 1, vector<bool>(n + 1, false));
-
-    memo[m][n] = match(a[m], b[n]);
-    bool remain_lower = islower(a[m]);
-    for (int i = m - 1; i >= 0; --i) {
-        memo[i][n] = match(a[i], b[n]) && remain_lower;
-        memo[i][n] = memo[i][n] || (islower(a[i]) && memo[i+1][n]);
-        remain_lower = remain_lower && islower(a[i]); 
-        printf("DBG: memo[%d][n]: %s\n", i, (memo[i][n] ? "true" : "false"));
-    }
-    /*
-    for (int j = n - 1; j >= 0; --j) {
-        memo[m][j] = match(a[m], b[j]) && (memo[m][j+1] == false);
-        memo[m][j] = memo[m][j] || (islower(b[j]) && memo[m][j+1]);
-        printf("DBG: memo[m][%d]: %s\n", j, (memo[m][j] ? "true" : "false"));
-    }
-    */
-    for (int i = m - 1; i >= 0; --i) {
-        for (int j = n - 1; j >= 0; --j) {
-            memo[i][j] = match(a[i], b[j]) && memo[i+1][j+1];
-            memo[i][j] = memo[i][j] || (islower(a[i]) && memo[i+1][j]);
-            printf("DBG: memo[%d][%d]: %s\n", i, j, (memo[i][j] ? "true" : "false"));
-        }
-    }
-    printf("memo[0][0]: %s\n", (memo[0][0] ? "YES" : "NO"));
-    return (memo[0][0] ? "YES" : "NO");
-}
-#else // Timeout
+#if 0 // DP with memoization
 bool abbreviation(const string &a, const string &b, map<string, bool> &memo) {
     int m = a.length();
     int n = b.length();
@@ -70,6 +38,32 @@ bool abbreviation(const string &a, const string &b, map<string, bool> &memo) {
 string abbreviation(string a, string b) {
     map<string, bool> memo;
     string result = abbreviation(a, b, memo) ? "YES" : "NO";
+    cout << result << endl;
+    return result;
+}
+#else // DP - bottome up
+bool is_abbrev(string &a, string &b) {
+    int m = a.length();
+    int n = b.length();
+    vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
+    dp[0][0] = true;
+    for (int i = 0; i < m; ++i) {
+        if (islower(a[i])) dp[i+1][0] = dp[i][0];        
+    }
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (match(a[i], b[j])) {
+                dp[i+1][j+1] = dp[i][j] || (islower(a[i]) && dp[i][j+1]);
+            } else if (islower(a[i])) {
+                dp[i+1][j+1] = dp[i][j+1];
+            }
+        }        
+    }
+    return dp[m][n];
+}
+
+string abbreviation(string a, string b) {
+    string result = is_abbrev(a, b) ? "YES" : "NO";
     cout << result << endl;
     return result;
 }

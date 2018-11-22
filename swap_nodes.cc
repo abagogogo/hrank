@@ -88,7 +88,11 @@ vector<vector<int>> swapNodes(vector<vector<int>> indexes, vector<int> queries) 
 
     vector<vector<int>> output;
     for (auto k : queries) {
-        swap_at_depth(depth_map, k);
+        int h = k;
+        while (depth_map.find(h) != depth_map.end()) {
+            swap_at_depth(depth_map, h);
+            h += k;
+        }
 
         vector<int> seq;
         print(nodes[1], seq);

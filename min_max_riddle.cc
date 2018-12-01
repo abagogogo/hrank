@@ -28,6 +28,24 @@ vector<long> riddle(vector<long> arr) {
     }
     return answer;
 }
+#eise if 0 // O(n^2): TIMEOUT
+vector<long> riddle(vector<long> arr) {
+    vector<long> ans;
+
+    vector<long> last(arr.begin(), arr.end());
+    ans.push_back(*max_element(last.begin(), last.end()));
+
+    for (int w = 2; w <= arr.size(); ++w) {
+        long max_v = INT_MIN;
+        for (int pos = arr.size() - 1; pos - w + 1 >= 0; --pos) {
+            long v = min(last[pos - 1], arr[pos]);
+            max_v = max(v, max_v);
+            last[pos] = v;
+        }
+        ans.push_back(max_v);
+    }
+    return ans;
+}
 #else // O(n)
 vector<long> riddle(vector<long> arr) {
     int n = arr.size();

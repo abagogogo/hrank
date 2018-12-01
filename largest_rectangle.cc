@@ -27,7 +27,7 @@ long largestRectangle(vector<int> h) {
 
     h.push_back(0);
     s.push({h[0], 0});
-    for (int i = 0; i < h.size(); ++i) {
+    for (int i = 1; i < h.size(); ++i) {
         if (h[i] >= h[i-1]) {
             s.push({h[i], i});
         } else {

@@ -4,6 +4,7 @@ using namespace std;
 
 vector<string> split_string(string);
 
+#if 0
 // Complete the roadsAndLibraries function below.
 struct Node {
     int id;
@@ -61,6 +62,44 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
     }
     return cost;
 }
+#else // 2018/12/01
+int dfs(unordered_map<int, vector<int>> &graph, int start, unordered_set<int> &visited) {
+    if (graph.find(start) == graph.end()) return 0;
+    if (visited.count(start) > 0) return 0;
+
+    visited.insert(start);
+    int num_cities = 1;
+    for (int next : graph[start]) {
+        num_cities += dfs(graph, next, visited);
+    }
+    return num_cities;
+}
+
+long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
+    unordered_set<int> visited;
+    unordered_map<int,vector<int>> graph;
+
+    for (int i = 1; i <= n; ++i) graph[i] = {};
+    
+    for (auto r : cities) {
+        graph[r[0]].push_back(r[1]);
+        graph[r[1]].push_back(r[0]);
+    }
+
+    long cost = 0;    
+    for (auto it = graph.begin(); it != graph.end(); ++it) {
+        int num_cities = dfs(graph, it->first, visited);
+        if (num_cities > 0) {
+            if (c_lib < c_road) {
+                cost += long(num_cities) * (long)c_lib;
+            } else {
+                cost += (long)(num_cities - 1) * (long)c_road + (long)c_lib;
+            }
+        }
+    }
+    return cost;
+}
+#endif
 
 int main()
 {

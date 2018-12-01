@@ -116,8 +116,7 @@ int minimumMoves(vector<string> grid, int startX, int startY, int goalX, int goa
     printf("<DBG> min #moves=%d\n", min_moves);
     return min_moves;
 }
-#else // BFS
-// Complete the minimumMoves function below.
+#elif 0 // BFS
 struct Pos {
     int x;
     int y;
@@ -209,7 +208,51 @@ int minimumMoves(vector<string> grid, int startX, int startY, int goalX, int goa
     }
     return -1;
 }
-#endif // BFS
+#elif 1 // BFS: 2018/12/01
+void get_neighbors(int x, int y, vector<string> &grid, vector<pair<int,int>> &list) {    
+    static vector<vector<int>> dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    int size = grid.size();
+    for (auto dir : dirs) {
+        for (int s = 1; s < size; ++s) {
+            int nx = x + dir[0] * s;
+            int ny = y + dir[1] * s;
+            if (nx >= 0 && nx < size && ny >= 0 && ny < size && grid[nx][ny] == '.') {
+                list.push_back(make_pair(nx, ny));
+            } else {
+                break;
+            }
+        }
+    }
+}
+
+int minimumMoves(vector<string> grid, int startX, int startY, int goalX, int goalY) {
+    unordered_map<string, int> visited;
+    queue<pair<int,int>> q;
+
+    if (startX == goalX && startY == goalY) return 0;
+    q.push({startX, startY});    
+    visited[to_string(startX) + "," + to_string(startY)] = 0;
+    
+    while (!q.empty()) {
+        auto curr = q.front(); q.pop();
+        int dist = visited[to_string(curr.first)+","+to_string(curr.second)];
+
+        vector<pair<int,int>> list;
+        get_neighbors(curr.first, curr.second, grid, list);
+        for (auto next : list) {
+            string key = to_string(next.first) + "," + to_string(next.second);
+            if (visited.find(key) == visited.end()) {
+                if (next.first == goalX && next.second == goalY) {
+                  return dist + 1;
+                }
+                q.push(next);
+                visited[key] = dist + 1;
+            }
+        }
+    }
+    return -1;
+}
+#endif
 
 int main()
 {

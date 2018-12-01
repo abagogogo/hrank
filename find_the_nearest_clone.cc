@@ -14,83 +14,51 @@ vector<string> split_string(string);
  * 3. An edge exists between <name>_from[i] to <name>_to[i].
  *
  */
- struct Node {
-    int no;
-    int color;     
-    vector<Node*> adj;
-    bool marked;
-    int depth;
-
-    Node(int a_no, int a_color) {
-        no = a_no;
-        color= a_color;
-        marked = false;
-        depth = INT_MAX;
-    }
-
-    void connect(Node *to) {
-        adj.push_back(to);
-    }
- };
-
-
-void do_bfs(Node *start, vector<int> &dist, int val) {
-    if (start->marked) return;
-
-    deque<Node*> q;
-
-    start->marked = true;
-    start->depth = 0;
-    q.push_back(start);
+int bfs(unordered_map<int, vector<int>> &graph, vector<long> &ids, int src, int val) {
+    unordered_map<int, int> dist; // id -> dist from src
+    queue<int> q;
+    
+    dist[src] = 0;
+    q.push(src);
     
     while (!q.empty()) {
-        Node *curr = q.front(); q.pop_front();
-        for (auto *next : curr->adj) {
-            if (!next->marked) {
-                next->marked = true;
-                next->depth = curr->depth + 1;
-                q.push_back(next);
+        int curr = q.front(); q.pop();
 
-                if (next->color == val) {
-                    dist.push_back(next->depth);
-                }
+        for (int next : graph[curr]) {
+            if (dist.find(next) != dist.end()) continue;            
+            dist[next] = dist[curr] + 1;
+            q.push(next);
+
+            if (ids[next - 1] == val) {
+                return dist[next];
             }
         }
     }
+    return INT_MAX;
 }
 
 int findShortest(int graph_nodes, vector<int> graph_from, vector<int> graph_to, vector<long> ids, int val) {
-    // construct graph.
-    map<int, Node *> nodes;
-    for (int i = 0; i < graph_nodes; ++i) {        
-        Node *n = new Node(i+1, ids[i]);
-        nodes[i+1] = n;
+    unordered_map<int,vector<int>> graph;        
+
+    for (int i = 1; i <= graph_nodes; ++i) {
+        graph[i] = {};
     }
-    for (int i = 0; i < graph_from.size() && i < graph_to.size(); ++i) {
+    for (int i = 0; i < graph_from.size(); ++i) {
         int from = graph_from[i];
         int to = graph_to[i];
-        nodes[from]->connect(nodes[to]);
-        nodes[to]->connect(nodes[from]);
+        graph[from].push_back(to);
+        graph[to].push_back(from);
     }
     
-    // BFS
     int min_dist = INT_MAX;
-    for (int id = 1; id <= nodes.size(); ++id) {
-        if (nodes[id]->color != val) continue;
+    for (auto it = graph.begin(); it != graph.end(); ++it) {
+        int src = it->first;
+        if (ids[src - 1] != val) continue;
 
-        vector<int> dist;
-        do_bfs(nodes[id], dist, val);
-        if (!dist.empty()) {
-            sort(dist.begin(), dist.end());
-            min_dist = min(dist[0], min_dist);
-            for (int i = 1; i < dist.size(); ++i) {
-                min_dist = min(dist[i] - dist[i-1], min_dist);
-            }
-        }
+        int dist = bfs(graph, ids, src, val);
+        min_dist = min(dist, min_dist);
     }
-    
-    // TODO: free nodes allocated.
-    return min_dist == INT_MAX ? -1 : min_dist;
+    return (min_dist == INT_MAX) ? -1 : min_dist;    
 }
 
 int main()
@@ -165,4 +133,3 @@ vector<string> split_string(string input_string) {
 
     return splits;
 }
-

@@ -28,7 +28,7 @@ vector<long> riddle(vector<long> arr) {
     }
     return answer;
 }
-#eise if 0 // O(n^2): TIMEOUT
+#elif 0 // O(n^2): TIMEOUT
 vector<long> riddle(vector<long> arr) {
     vector<long> ans;
 

@@ -14,27 +14,13 @@ void minimumBribes(vector<int> q) {
     }
 
     int cnt = 0;
-#if 0
-    for (int i = q.size() -1; i > 0; --i) {
-        bool swapped = false;
-        for (int j = 0; j < i; ++j) {            
-            if (q[j] > q[j+1]) {
-                cnt++;
-                swap(q[j], q[j+1]);
-                swapped = true;
-            }            
-        }
-        if (!swapped) break;
-    }
-#else
     for (int i = q.size() - 1; i >= 0; --i) {
         for (int j = max(0, q[i] - 3); j < i; ++j) {
             if (q[j] > q[i]) cnt++;
         }
     }
-#endif
     
-    cout << cnt <<endl;
+    cout << cnt << endl;
 }
 
 int main()

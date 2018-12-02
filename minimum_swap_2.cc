@@ -5,47 +5,6 @@ using namespace std;
 vector<string> split_string(string);
 
 // Complete the minimumSwaps function below.
-#if 0
-int partition(vector<int> &arr, int start, int end, int &num_swaps) {
-    int pivot = arr[end];
-
-    int i = start - 1;
-    for (int j = start; j < end; ++j) {
-        if (arr[j] <= pivot) {
-            printf("DBG: i=%d, j=%d, start=%d, end=%d, a[j]=%d, pivot=%d\n", i, j , start, end, arr[j], pivot);
-            ++i;
-            if (arr[i] > pivot) {
-                swap(arr[i], arr[j]);
-                ++num_swaps;
-            }
-        }
-    }
-
-    if (i + 1 != end) {
-        printf("DBG: i+1=%d, end=%d pivot=%d\n", i + 1, end, pivot);
-        ++num_swaps;
-    }
-    printf("DBG: num_swaps = %d\n",  num_swaps);
-    arr[end] = arr[i + 1];
-    arr[i + 1] = pivot;
-    
-    return (i + 1);
-}
-
-int qsort(vector<int> &arr, int start, int end) {
-    int num_swaps = 0;
-
-    if (start >= end) return 0;
-    int mid = partition(arr, start, end, num_swaps);
-    num_swaps += qsort(arr, start, mid - 1);
-    num_swaps += qsort(arr, mid + 1, end);
-    printf("DBG: return num_swaps = %d\n",  num_swaps);
-    return num_swaps;
-}
-int minimumSwaps(vector<int> arr) {
-    return qsort(arr, 0, arr.size()-1);
-}
-#else
 int minimumSwaps(vector<int> arr) {
     int cnt = 0;
     int i = 0;
@@ -64,7 +23,6 @@ int minimumSwaps(vector<int> arr) {
     }
     return cnt;
 }
-#endif
 
 int main()
 {

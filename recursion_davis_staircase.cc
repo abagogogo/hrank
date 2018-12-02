@@ -3,15 +3,8 @@
 using namespace std;
 
 // Complete the stepPerms function below.
+#if 1 // DP solution   
 int stepPerms(int n) {   
-#if 0
-    if (n < 0) return 0;
-    if (n <= 1) return 1;
-
-     
-    long cnt = (long)stepPerms(n-1) + (long)stepPerms(n-2) + (long)stepPerms(n-3);    
-    return (int)(cnt % 1000000007);
-#else    
     if (n < 0) return 0;
     if (n == 0 || n== 1) return 1;
     if (n == 2) return 2;
@@ -29,8 +22,24 @@ int stepPerms(int n) {
     }
     printf("DBG: n=%d => %d ways\n", n, (int)fm0);
     return (int)fm0;
-#endif
 }
+#else // memoization solution
+int helper(unordered_map<int,int> &memo, int n) {
+    if (n < 0) return 0;    
+    if (memo.find(n) == memo.end()) {        
+        memo[n] = helper(memo, n-3) + helper(memo, n-2) + helper(memo, n-1);
+    }
+    return memo[n];
+}
+int stepPerms(int n) {
+    unordered_map<int,int> memo;
+    memo[0] = 0;
+    memo[1] = 1;
+    memo[2] = 2;
+    memo[3] = 4;
+    return helper(memo, n);
+}
+#endif
 
 int main()
 {

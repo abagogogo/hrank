@@ -191,27 +191,38 @@ void test(long long x) {
 
 void dfs2(int x, int f) {
 	
-
+    // Map1[val]: count of subtree with sum=value, which is enough of 2 subtrees with same sum
+    //
+    // Map2[val]: it's used to detect the cut between a subtree and its ancenstor or one big and another small tree
+    //     case 1: 2x -> x
+    //
+    //     case 2: (total - x) -> x        
+    //             x
+    //
+    //     ?case 3: y = (total - x) / 2
+    //             (total - (total - x)/2)
+    //             x
+    //
 	
-	if (Map2[2 * sum[x]])
+	if (Map2[2 * sum[x]]) // case 1
 		test(sum[x]);
-	if (Map2[ctot - sum[x]])
+	if (Map2[ctot - sum[x]]) // case 2
 		test(sum[x]);
-	if ((ctot - sum[x]) % 2 == 0 && Map2[ctot - (ctot - sum[x]) / 2])
+	if ((ctot - sum[x]) % 2 == 0 && Map2[ctot - (ctot - sum[x]) / 2]) // case 3
 		test((ctot - sum[x]) / 2);
 
 	Map2[sum[x]] += 1;
 
-	if (Map1[sum[x]] > Map2[sum[x]])
+	if (Map1[sum[x]] > Map2[sum[x]]) // sum[x] exists 2 more times => check sum[x]
 		test(sum[x]);
 
-	if (ctot - 2 * sum[x] >= sum[x] && Map1[ctot - 2 * sum[x]] > Map2[ctot - 2 * sum[x]])
+	if (ctot - 2 * sum[x] >= sum[x] && Map1[ctot - 2 * sum[x]] > Map2[ctot - 2 * sum[x]]) // sum[x] < 1/3 * total => check sum[x]?
 		test(sum[x]);
 
-	if ((ctot - sum[x]) % 2 == 0 && (ctot - sum[x]) / 2 >= sum[x] && Map1[(ctot - sum[x]) / 2] > Map2[(ctot - sum[x]) / 2])
+	if ((ctot - sum[x]) % 2 == 0 && (ctot - sum[x]) / 2 >= sum[x] && Map1[(ctot - sum[x]) / 2] > Map2[(ctot - sum[x]) / 2]) // sum > 1/3 => check (total - sum[x])/2
 		test((ctot - sum[x]) / 2);
 
-	if (sum[x] * 2 == ctot)
+	if (sum[x] * 2 == ctot) // sum is 1/2 * total
 		ans = min(ans, sum[x]);
 	
 	for (int i = 0; i < (int) ve[x].size(); i++)

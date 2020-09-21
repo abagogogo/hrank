@@ -1,0 +1,25 @@
+#!bin/python3
+
+from collections import Counter
+
+# Input:
+# 7
+# 1 2 3 2 4 4 5
+# Output
+# 2
+def sockMerchang(n, ar):
+    sock_cnt, pairs = Counter(arr), 0
+    for color in sock_cnt.keys(): pairs += (sock_cnt[color] // 2)
+    return pairs
+
+
+# C++
+int sockMerchant(int n, vector<int> ar) {
+    map<int, int> counter;
+    int pairs = 0;
+    for (auto color : ar) counter[color] += 1;
+    for (auto it = counter.begin(); it != counter.end(); ++it) {
+        pairs += it->second / 2;
+    }
+    return pairs;
+}

@@ -1,0 +1,24 @@
+#!/bin/python3
+
+# Ex:
+# Input: s = "abcac", n = 10
+# Output = 4 ("abcac""abcac" has 4 'a')
+def repeatedString(s, n):
+    return s.count("a") * (n // len(s)) + s[: n % len(s)].count("a)
+
+
+# C++
+long count(const string &s, char ch, int len) {
+    long cnt = 0;
+    for (int i = 0; i < len; ++i) {
+        if (s[i] == ch) cnt++;
+    }
+    return cnt; 
+}
+
+long repeatedString(string s, long n) {
+    long len = (long)s.length();
+    long q = n / (long)len;
+    long r = n - (q * len);
+    return count(s, 'a', len) * q + count(s, 'a', r);
+}

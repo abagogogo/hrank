@@ -1,0 +1,48 @@
+#!/bin/python3
+
+# Ex:
+#   In: c = [0 0 1 0 0 1 0]
+#   Out: 4 (4 jumps: 0->1->3->4->6)
+# Loop. Greedy method: jump 2 when possible.
+def jumpingOnClouds(c):
+    i, jumps = 0, 0
+    length = len(c)
+    while i < length - 1:
+        if i + 2 < length and c[i + 2] == 0:
+            i += 1
+        i += 1
+        jumps += 1
+    return jumps
+
+
+# Recursion.
+def jumpingOnClouds(c):        
+    if len(c) <= 1: return 0
+    if len(c) == 2: return 1
+    if c[2] == 0:
+        return jumpingOnClouds(c[2:]) + 1
+    else:
+        return jumpingOnClouds(c[1:]) + 1
+
+// C++
+// Recusion with copy constructor to slice a vector.
+int jumpingOnClouds(vector<int> c) {
+    if (c.size() <= 1) return 0;
+    if (c.size() == 2) return 1;
+    int step_size = (c[2] == 0) ? 2 : 1;
+    vector<int> next_c = vector<int>(c.begin() + step_size, c.end());
+    return jumpingOnClouds(next_c) + 1;
+}
+
+// Recursion with index.
+int jumpingOnClouds(const vector<int>& c, int begin, int end) {
+    int clouds = end - begin + 1;
+    if (clouds <= 1) return 0;
+    if (clouds == 2) return 1;
+    int step_size = (c[begin + 2] == 0) ? 2 : 1;    
+    return jumpingOnClouds(c, begin + step_size, end) + 1;
+}
+
+int jumpingOnClouds(vector<int> c) {
+    return jumpingOnClouds(c, 0, c.size() - 1);
+}

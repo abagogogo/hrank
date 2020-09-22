@@ -1,0 +1,27 @@
+#!/bin/python3
+
+def lca(root, v1, v2):
+  #Enter your code here
+  if root == None: return None
+  if v1 < root.info and v2 < root.info:
+    return lca(root.left, v1, v2)
+  if v1 > root.info and v2 > root.info:
+    return lca(root.right, v1, v2)
+  return root
+
+# c++
+#include <bits/stdc++.h>
+  
+    Node *lca(Node *root, int v1,int v2) {	
+        Node *curr = root;
+        while (curr) {
+            if (v1 < curr->data && v2 < curr->data) {
+                curr = curr->left;
+            } else if (v1 > curr->data && v2 > curr->data) {
+                curr = curr->right;
+            } else {
+                break;
+            }
+        }
+        return curr;
+    }

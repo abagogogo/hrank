@@ -1,0 +1,27 @@
+#!/bin/Python3
+
+def checkBST(root):    
+    return checkBSTRange(root, INT_MIN, INT_MAX)        
+
+def checkBSTRange(root, minval, maxval):
+    if root == None: return True
+    
+    if minval < root.data < maxval:
+        return (checkBSTRange(root.left, minval, root.data) and 
+                checkBSTRange(root.right, root.data, maxval))
+    else:
+        return False
+
+# C++
+#include <climits>
+
+bool check_range(Node *root, int min_val, int max_val) {
+    if (!root) return true;
+    if (root->data <= min_val || root->data >= max_val) return false;
+    return check_range(root->left, min_val, root->data) 
+        && check_range(root->right, root->data, max_val);                
+}
+
+bool checkBST(Node *root) {
+    return check_range(root, INT_MIN, INT_MAX); 
+}

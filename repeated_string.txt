@@ -4,7 +4,7 @@
 # Input: s = "abcac", n = 10
 # Output = 4 ("abcac""abcac" has 4 'a')
 def repeatedString(s, n):
-    return s.count("a") * (n // len(s)) + s[: n % len(s)].count("a)
+    return s.count("a") * (n // len(s)) + s[: n % len(s)].count("a")
 
 
 # C++

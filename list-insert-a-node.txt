@@ -1,0 +1,36 @@
+def insertNodeAtPosition(head, data, position):    
+    new_node = SinglyLinkedListNode(data)
+
+    if head is None: 
+        return new_node
+
+    if position == 0:
+        new_node.next = head
+        return new_node
+
+    before = head
+    for i in range(1,position):        
+        before = before.next                 
+    new_node.next = before.next
+    before.next = new_node
+    return head
+
+// C++
+SinglyLinkedListNode* insertNodeAtPosition(SinglyLinkedListNode* head, int data, int position) {
+    SinglyLinkedListNode *new_node = new SinglyLinkedListNode(data);
+
+    if (head == nullptr) return new_node;
+    
+    if (position == 0) {
+        new_node->next = head;
+        return new_node;
+    }    
+
+    SinglyLinkedListNode *before = head;
+    for (int i = 1; i < position; ++i) {
+        before = before->next;
+    }
+    new_node->next = before->next;
+    before->next = new_node;
+    return head;
+}

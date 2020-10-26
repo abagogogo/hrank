@@ -1,0 +1,15 @@
+def reverse(head):
+    if head == None: return None
+
+    curr = head
+    next = head.next
+    prev = head.prev
+    while curr != None:
+        curr.next = prev
+        curr.prev = next
+
+        prev = curr
+        curr = next
+        next = next.next if next else None
+        
+    return prev

@@ -1,0 +1,61 @@
+def findMergeNode(head1, head2):
+    len1 = getListLen(head1)
+    len2 = getListLen(head2)
+    diff = len1 - len2
+    if diff > 0:
+        head1 = moveList(head1, diff)
+    elif diff < 0:
+        head2 = moveList(head2, -diff)
+
+    while head1 != head2:
+        head1 = head1.next
+        head2 = head2.next
+    return head1.data
+
+def getListLen(head):
+    len = 0
+    while head != None:
+        len += 1
+        head = head.next
+    return len
+
+def moveList(head, count):
+    for i in range(count):
+        if head == None: break
+        head = head.next
+    return head
+
+
+/*
+ * For your reference:
+ *
+ * SinglyLinkedListNode {
+ *     int data;
+ *     SinglyLinkedListNode* next;
+ * };
+ *
+ */
+ int get_len(SinglyLinkedListNode *head) {
+    int len = 0;
+    while(head) {
+        len++;
+        head = head->next;
+    }
+    return len;
+}
+
+int findMergeNode(SinglyLinkedListNode* head1, SinglyLinkedListNode* head2) {
+    int len1 = get_len(head1); // TODO
+    int len2 = get_len(head2);
+
+    SinglyLinkedListNode *shorter = (len1 <= len2) ? head1 : head2;
+    SinglyLinkedListNode *longer  = (len1 > len2) ? head1 : head2;
+    for (int i = 0; i < abs(len1 - len2); ++i) {
+        longer = longer->next;
+    }
+    while (longer && shorter && longer != shorter) {
+        longer = longer->next;
+        shorter = shorter->next;
+    }
+    
+    return (longer) ? longer->data : -1;

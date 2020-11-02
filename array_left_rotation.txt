@@ -1,0 +1,15 @@
+#!/bin/python3
+
+# Complete the rotLeft function below.
+def rotLeft(a, d):
+    d = d % len(a)
+    return a[d:] + a[0:d]
+
+#C++
+vector<int> rotLeft(vector<int> a, int d) {
+    vector<int> rot_a;
+    start = d % a.size();
+    for (int i = start; i < a.size(); ++i) rot_a.push_back(a[i]);
+    for (int i = 0; i < start; ++i) rot_a.push_back(a[i]);
+    return rot_a;
+}

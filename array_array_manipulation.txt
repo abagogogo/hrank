@@ -1,0 +1,15 @@
+#!/bin/python3
+
+# Complete the arrayManipulation function below.
+def arrayManipulation(n, queries):
+    array = [0] * (n + 2)
+    for q in queries:
+        (a, b, k) = q
+        array[a-1] += k
+        array[b] -= k
+    sum = 0
+    max_value = array[0]
+    for i in range(n):
+        sum += array[i]
+        max_value = max(max_value, sum)
+    return max_value

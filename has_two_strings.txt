@@ -1,0 +1,33 @@
+#!/bin/python3
+
+from collections import Counter
+
+def twoStrings(s1, s2):
+    word_freq = Counter(s1)
+    for ch in s2:
+        if word_freq[ch] > 0: 
+            return "YES"            
+    return "NO"
+
+# C++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+string twoStrings(string s1, string s2) {
+    vector<int> freqs(26, 0);
+    for (auto ch : s1) freqs[ch - 'a']++;
+    for (auto ch : s2 {
+        if (freq[ch - 'a'] > 0) return "YES";
+    }
+    return "NO";
+}
+
+string twoStrings(string s1, string s2) {
+    unordered_map<char,int> word_count;
+    for (auto ch : s1) word_count[ch]++;
+    for (auto ch : s2) {
+        if (word_count[ch] > 0) return "YES";
+    }
+    return "NO";
+}

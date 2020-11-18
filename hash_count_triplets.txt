@@ -1,0 +1,15 @@
+#!/bin/python3
+
+# Complete the countTriplets function below.
+def countTriplets_n(arr, r):
+    map2 = {}
+    map3 = {} 
+    cnt = 0
+    
+    for val in arr:
+        if val in map3:
+            cnt += map3[val]            
+        if val in map2:
+            map3[val*r] = map3.get(val*r, 0) + map2[val]            
+        map2[val] = map2.get(val, 0) + 1
+    return cnt

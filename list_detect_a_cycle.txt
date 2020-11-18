@@ -1,0 +1,35 @@
+"""
+Detect a cycle in a linked list. Note that the head pointer may be 'None' if the list is empty.
+
+A Node is defined as: 
+ 
+    class Node(object):
+        def __init__(self, data = None, next_node = None):
+            self.data = data
+            self.next = next_node
+"""
+
+
+def has_cycle(head):
+    fast = head
+    slow = head
+    while fast and slow and fast.next:
+        if fast == slow: return True
+        fast = fast.next
+        slow = slow.next
+    return False
+
+
+// C++
+bool has_cycle(Node* head) {
+    // Complete this function
+    // Do not write the main method
+    Node *p = head;
+    Node *q = head;
+    while (p && q && q->next) {
+        p = p->next;
+        q = q->next->next;
+        if (p == q) return true;
+    }
+    return false;
+}

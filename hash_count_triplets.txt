@@ -8,8 +8,25 @@ def countTriplets_n(arr, r):
     
     for val in arr:
         if val in map3:
-            cnt += map3[val]            
+            cnt += map3[val]
         if val in map2:
-            map3[val*r] = map3.get(val*r, 0) + map2[val]            
-        map2[val] = map2.get(val, 0) + 1
+            map3[val*r] = map3.get(val*r, 0) + map2[val]
+        map2[val*r] = map2.get(val*r, 0) + 1
     return cnt
+
+# C++
+long countTriplets(vector<long> arr, long r) {
+  unordered_map<long, long> map2, map3;
+  long cnt = 0;
+
+  for (auto val : arr) {
+    if (map3.find(val) != map3.end()) {
+      cnt += map3[val];
+    }
+    if (map2.find(val) != map2.end()) {
+      map3[val * r] += map2[val];
+    }
+    map2[val * r]++;
+  }
+  return cnt;
+}

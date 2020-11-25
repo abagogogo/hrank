@@ -1,0 +1,22 @@
+#!/bin/python3
+
+# Complete the maximumToys function below.
+def maximumToys(prices, k):
+    prices = sorted(prices)
+    cost, toys = 0, 0
+    for p in prices:
+        if cost + p > k: break
+        cost += p
+        toys += 1
+    return toys
+
+int maximumToys(vector<int> prices, int k) {
+    int toys = 0;
+    sort(prices.begin(), prices.end());
+    for (auto p : prices) {
+        if (k - p < 0) break;
+        k -= p;
+        ++toys;
+    }
+    return toys;
+}

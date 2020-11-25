@@ -1,0 +1,69 @@
+#!/bin/python3
+
+# Complete the freqQuery function below.
+from collections import Counter
+def freqQuery(queries):
+    freq = Counter()
+    cnt = Counter()
+    ans = []
+    for q in queries:        
+        if q[0] == 1: # add
+            val = q[1]            
+            if freq[val] > 0: cnt[freq[val]] -= 1
+            freq[val] += 1
+            cnt[freq[val]] += 1
+        elif q[0] == 2: # del
+            val = q[0]
+            if freq[val] == 0: continue
+            cnt[freq[val]] -= 1
+            freq[val] -= 1
+            cnt[freq[val]] += 1
+        else: # check                        
+            ans.append(1 if cnt[q[1]] > 0 else 0)
+    return ans
+
+#C++
+// Complete the freqQuery function below.
+vector<int> freqQuery(vector<vector<int>> queries) {
+    unordered_map<int, int> val_map;
+    unordered_map<int, int> freq_map;
+    int val, old_freq, new_freq;
+    vector<int> res_list;
+
+    for (auto q : queries) {
+        val = q[1];
+        switch (q[0]) {
+        case 1: // add
+            old_freq = val_map[val];
+            val_map[val]++;
+            new_freq = val_map[val];
+            if (old_freq > 0) {
+                freq_map[old_freq]--;
+                if (freq_map[old_freq] == 0) freq_map.erase(old_freq);
+            }
+            freq_map[new_freq]++;
+            break;
+
+        case 2: // delete
+            if (val_map.find(val) == val_map.end()) break;            
+            old_freq = val_map[val];            
+            val_map[val]--;
+            new_freq = val_map[val];
+            freq_map[old_freq]--;
+            if (freq_map[old_freq] == 0) freq_map.erase(old_freq);
+            if (new_freq > 0) freq_map[new_freq]++;
+            else val_map.erase(val);
+            break;
+
+        case 3: // check freq
+            if (freq_map.find(val) != freq_map.end()) {
+                assert(freq_map[val] > 0);
+                res_list.push_back(1);
+            } else {
+                res_list.push_back(0);
+            }
+            break;
+        }
+    }
+    return res_list;
+}

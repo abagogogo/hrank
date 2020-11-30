@@ -1,0 +1,66 @@
+#!/bin/python3
+
+# Naive way: O(n^2 * logd)
+# Complete the activityNotifications function below.
+def activityNotifications(expenditure, d):
+    trailing = expenditure[0:d]    
+    notifications = 0
+    for i in range(d, len(expenditure)):                
+        if expenditure[i] >= get_median(trailing) * 2:
+            notifications += 1
+        trailing.pop(0)
+        trailing.append(expenditure[i])
+    return notifications
+
+def get_median(trailing):    
+    n = len(trailing)
+    m = n // 2
+    s = sorted(trailing)
+    if (n % 2): 
+        return s[m]
+    else:
+        return (s[m-1] + s[m]) / 2
+
+# O(n)
+class FraudCheck:
+    def __init__(self, max_exp, trail):
+        self.max_exp = max_exp
+        self.freqs = [0] * (max_exp + 1)
+        self.d = len(trail)
+        self.m1 = (self.d + 1) // 2
+        for i, v in enumerate(trail):        
+            self.freqs[v] += 1                    
+    
+    def get_limit(self, new_exp, old_exp):                   
+        m1, m2 = self.m1, self.m1 + 1
+        m1_index = 0
+        for i, cnt in enumerate(self.freqs):
+            m1_index = i
+            if m1 <= cnt: break
+            m1 -= cnt            
+            m2 -= cnt
+        if self.d % 2 == 1: 
+            return m1_index * 2
+            
+        m2_index = 0
+        #for i, cnt in enumerate(self.freqs[m2_index:]):            
+        for i in range(m1_index, len(self.freqs)):
+            cnt = self.freqs[i]
+            m2_index = i
+            if m2 <= cnt: break
+            m2 -= cnt
+        return m1_index + m2_index        
+            
+    def spendAndWarn(self, old_exp, new_exp):                   
+        toWarn = (new_exp >= self.get_limit(old_exp, new_exp))
+        self.freqs[old_exp] -= 1
+        self.freqs[new_exp] += 1
+        return toWarn
+    
+def activityNotifications(expenditure, d):
+    checker = FraudCheck(200, expenditure[:d])    
+    notifications = 0
+    for i, new_exp in enumerate(expenditure[d:]):           
+        if checker.spendAndWarn(expenditure[i], new_exp):
+            notifications += 1
+    return notifications

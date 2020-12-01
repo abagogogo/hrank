@@ -1,0 +1,30 @@
+#!/bin/python3
+
+# Complete the countInversions function below.
+def countInversions(arr):
+    n = len(arr)
+    if n <= 1: return 0
+    mid = n // 2
+    arr_l = arr[:mid]
+    arr_r = arr[mid:]
+    cnt = countInversions(arr_l) + countInversions(arr_r)    
+    
+    left, right, i = 0, 0, 0
+    while left < mid and right < (n - mid):
+        if arr_l[left] <= arr_r[right]:
+            arr[i] = arr_l[left]
+            left += 1
+        else:
+            cnt += (mid - left)
+            arr[i] = arr_r[right]            
+            right += 1
+        i += 1
+    while left < mid:
+        arr[i] = arr_l[left]
+        left += 1
+        i += 1
+    while right < (n - mid):
+        arr[i] = arr_r[right]
+        right += 1
+        i += 1
+    return cnt

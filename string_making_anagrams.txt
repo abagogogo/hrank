@@ -1,0 +1,22 @@
+#!/bin/python3
+
+# Complete the makeAnagram function below.
+from collections import Counter
+def makeAnagram(a, b):
+    count_a = Counter(a)
+    count_b = Counter(b)
+    count_a.subtract(count_b)
+    return sum(abs(cnt) for cnt in count_a.values())
+
+# C++
+int makeAnagram(string a, string b) {
+   unordered_map<char,int> counter;
+
+    for (auto ch : a) counter[ch]++;
+    for (auto ch : b) counter[ch]--;
+    int changes = 0;
+    for (auto it = counter.begin(); it != counter.end(); ++it) {
+        changes += abs(it->second);
+    }
+    return changes;
+}

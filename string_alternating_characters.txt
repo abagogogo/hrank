@@ -1,0 +1,8 @@
+#!/bin/python3
+
+# Complete the alternatingCharacters function below.
+def alternatingCharacters(s):    
+    deletoins = 0
+    for i in range(1, len(s)):
+        if s[i-1] == s[i]: deletoins += 1        
+    return deletoins

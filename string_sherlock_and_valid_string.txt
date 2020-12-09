@@ -1,0 +1,10 @@
+#!/bin/python3
+
+from collections import Counter
+def isValid(s):
+    counter = Counter(s)
+    first, diff = 0, 0
+    for cnt in counter.values():
+        if first == 0: first = cnt        
+        if cnt != first: diff += 1        
+    return 'YES' if diff <= 1 else 'NO'

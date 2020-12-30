@@ -1,0 +1,25 @@
+#!/bin/python3
+
+def luckBalance(k, contests):    
+    non_important = [c[0] for c in filter(lambda c: c[1] == 0, contests)]
+    important = [c[0] for c in filter(lambda c: c[1] == 1, contests)]
+    important = sorted(important, reverse=True)
+    return sum(non_important) + sum(important[:k]) - sum(important[k:])  
+    
+# C++
+int luckBalance(int k, vector<vector<int>> contests) {
+    vector<int> imp_lucks;
+    int result = 0;
+    for (auto c : contests) {
+        if (c[1] == 1) {
+            imp_lucks.push_back(c[0]);
+        } else {
+            result += c[0];
+        }
+    }
+    sort(imp_lucks.begin(), imp_lucks.end(), std::greater<int>());
+    for (auto luck : imp_lucks) {
+        result += ((k-- > 0) ? luck : -luck);
+    }
+    return result;
+}

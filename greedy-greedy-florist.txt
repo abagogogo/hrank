@@ -1,0 +1,26 @@
+#!/bin/python3
+
+def getMinimumCost(k, c):
+    c = sorted(c, reverse=True)
+    cost = 0
+    for i in range(len(c)):
+        cost += (i // k + 1) * c[i]
+    return cost
+
+def getMinimumCost(k, c):
+    return sum(cost * (i // k + 1) for i, cost in enumerate(sorted(c, reverse=True)))
+
+# C++
+int getMinimumCost(int k, vector<int> c) {
+    int total = 0;
+    int man = 0;
+    vector<int> times(k, 0);
+
+    sort(c.begin(), c.end(), std::greater<int>());
+    for (int i = 0; i < c.size(); ++i) {
+        total += (times[man] + 1) * c[i];
+        times[man]++;
+        man = (man + 1) % k;
+    }
+    return total;
+}

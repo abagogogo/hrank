@@ -1,0 +1,16 @@
+#!/bin/python3
+
+def maxMin(k, arr):
+    arr.sort()
+    return min([arr[x+k-1] - arr[x] for x in range(len(arr) - k + 1)])
+
+# C++
+int maxMin(int k, vector<int> arr) {
+    sort(arr.begin(), arr.end());
+    int min_unfair = INT_MAX;
+
+    for (int i = 0; i + k <= arr.size(); ++i) {
+        min_unfair = min(arr[i + k - 1] - arr[i], min_unfair);
+    }
+    return min_unfair;
+}

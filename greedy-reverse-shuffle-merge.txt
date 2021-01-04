@@ -1,0 +1,55 @@
+#!/bin/python3
+
+from collections import Counter
+def reverseShuffleMerge(s):
+    char_freq = Counter(s)
+    used_chars = Counter()
+    remain_chars = Counter(s)
+    answer = []
+        
+    def can_use(char):
+        return (char_freq[char] // 2 - used_chars[char]) > 0
+        
+    def can_pop(char):
+        needed_chars = char_freq[char] // 2
+        return used_chars[char] + remain_chars[char] - 1 >= needed_chars
+        
+    for char in reversed(s):
+        if can_use(char):
+            while answer and answer[-1] > char and can_pop(answer[-1]):
+                removed_char = answer.pop()
+                used_chars[removed_char] -= 1
+            used_chars[char] += 1
+            answer.append(char)
+        remain_chars[char] -= 1
+    return "".join(answer)
+
+# C++
+// Complete the reverseShuffleMerge function below.
+string reverseShuffleMerge(string s) {
+    int n = s.size();
+    vector<int> not_seen(26);
+    vector<int> count(26);
+    vector<int> required( 26 );
+    vector<char> chars_stack;
+
+    for(int i =0; i < n; i++){
+        not_seen[s[i]-'a']++;
+        required[s[i]-'a']++;
+    }
+    for(int i =0; i < 26; i++)
+        required[i]/=2; 
+    
+    for(int i =n-1; i >=0 ; not_seen[s[(i--)]-'a']--){
+        if(count [s[i]-'a'] == required[s[i]-'a'] ) continue;
+        while(!chars_stack.empty() && s[i] < chars_stack.back() 
+              && not_seen[ chars_stack.back()-'a'] +count[chars_stack.back()-'a'] -1 >=required[ (chars_stack.back()-'a')] ){
+            count[chars_stack.back()-'a']--;
+            chars_stack.pop_back();
+            
+        }
+            chars_stack.push_back(s[i]);
+            count[s[i]-'a']++;        
+    }
+    return string(chars_stack.begin(), chars_stack.end());
+}

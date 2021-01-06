@@ -1,0 +1,39 @@
+#!/bin/python3
+
+# Complete the whatFlavors function below.
+def whatFlavors(cost, money):
+    prices = {}
+    for i, p in enumerate(cost):
+        diff = money - p
+        if diff in prices:
+            print("%d %d" % (prices[diff][0], i + 1))
+            return
+        prices.setdefault(p, []).append(i + 1)
+
+# C++
+void print_answer(int a, int b) {
+    if (++a > ++b) swap(a, b);
+    cout << a << " " << b << endl;    
+}
+
+void whatFlavors(vector<int> cost, int money) {
+    unordered_map<int, vector<int>> d; //[50000];
+
+    for (int flavor = 0; flavor < cost.size(); ++flavor) {
+        int price = cost[flavor];
+        d[price].push_back(flavor);
+    }
+
+    for (int flavor = 0; flavor < cost.size(); ++flavor) {
+        int p1 = cost[flavor];        
+        int p2 = money - p1;
+        if (d.find(p2) == d.end()) continue;
+        if (p1 != p2) {
+            print_answer(flavor, d[p2][0]);
+            return;
+        } else if (d[p1].size() >= 2) {
+            print_answer(d[p1][0], d[p1][1]);
+            return;
+        }
+    }
+}

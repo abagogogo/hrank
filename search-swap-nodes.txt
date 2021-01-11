@@ -1,0 +1,75 @@
+// C++
+ struct Node {
+     Node *left;
+     Node *right;
+     int id;
+     int depth;
+
+     Node(int a_id) : id(a_id) {
+         left = right = nullptr;
+         depth = 1;
+     }
+ };
+
+ Node *find_node(int id, unordered_map<int, Node*> &node_map) {
+     auto it = node_map.find(id);
+     if (it != node_map.end()) return it->second;
+     Node *node = new Node(id);
+     node_map[id] = node;
+     return node;
+ }
+
+void build_tree(
+        vector<vector<int>> &indexes,  
+        unordered_map<int, Node*> &node_map, 
+        unordered_map<int, vector<Node*>> &depth_map) {
+    for (int i = 0; i < indexes.size(); ++i) {        
+        Node *node = find_node(i + 1, node_map);
+        if (indexes[i][0] > 1) {
+            Node *left = find_node(indexes[i][0], node_map);
+            node->left = left;
+            left->depth += node->depth;
+        }
+        if (indexes[i][1] > 1) {
+            Node *right = find_node(indexes[i][1], node_map);
+            node->right = right;
+            right->depth += node->depth;
+        }
+    }
+    for (auto it = node_map.begin(); it != node_map.end(); ++it) {
+        Node *node = it->second;
+        depth_map[node->depth].push_back(node);
+    }
+}
+
+void inorder(Node *curr, vector<int> &seq) {
+    if (!curr) return;
+    inorder(curr->left, seq);
+    seq.push_back(curr->id);
+    inorder(curr->right, seq);
+}
+
+void swap_depth(int k, unordered_map<int, vector<Node*>> &depth_map) {
+    int h = k;
+    while (depth_map.find(h) != depth_map.end()) {
+        auto list = depth_map[h];        
+        for (auto node : list) std::swap(node->left, node->right);
+        h += k;
+    }
+}
+
+vector<vector<int>> swapNodes(vector<vector<int>> indexes, vector<int> queries) {
+    unordered_map<int, Node*> node_map;
+    unordered_map<int, vector<Node*>> depth_map;
+    build_tree(indexes, node_map, depth_map);
+
+    vector<vector<int>> result;
+    for (int k : queries) {
+        swap_depth(k, depth_map);
+
+        vector<int> seq;
+        inorder(node_map[1], seq);
+        result.push_back(seq);
+    }
+    return result;
+}

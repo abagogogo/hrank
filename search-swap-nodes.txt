@@ -1,3 +1,100 @@
+#!/bin/python3
+
+#
+# Complete the swapNodes function below.
+#               
+from collections import deque
+def swapNodes(indexes, queries):   
+    class Node:
+        def __init__(self, a_id):
+            self.left = self.right = None
+            self.id = a_id
+            self.depth = 1
+    
+    def find_node(a_id):
+        if a_id not in node_map:
+            node_map[a_id] = Node(a_id)            
+        return node_map[a_id]
+        
+    def build_tree():
+        for i, (left, right) in enumerate(indexes):
+            node = find_node(i + 1)
+            if left > 1:
+                node.left = find_node(left)         
+                node.left.depth += node.depth
+            if right > 1:
+                node.right = find_node(right)
+                node.right.depth += node.depth
+        for (id, node) in node_map.items():
+            depth_map.setdefault(node.depth, []).append(node)
+    
+    def inorder(curr):
+        seq = []
+        if curr:        
+            seq.extend(inorder(curr.left))
+            seq.append(curr.id)
+            seq.extend(inorder(curr.right))
+        return seq
+    
+    def inorder_stack(curr):        
+        seq = []
+        stack = deque()
+        while curr or stack:
+            while curr:                
+                stack.append(curr)
+                curr = curr.left
+            curr = stack[-1]
+            seq.append(curr.id)                        
+            curr = curr.right
+            stack.pop()                        
+        return seq
+                
+    def swap_depth(k):
+        h = k
+        while h in depth_map:
+            nodes = depth_map[h]
+            for node in nodes:
+                node.left, node.right = node.right, node.left
+            h += k            
+
+    #
+    # Write your code here.
+    #        
+    result = []
+    node_map = {}
+    depth_map = {}            
+    build_tree()        
+    for k in queries:
+        swap_depth(k)        
+        result.append(inorder_stack(node_map[1]))
+    return result
+
+def debug_tree(node_map):
+    print("##### debug_tree #####")
+    for (id, node) in node_map.items():
+        print("DBG: node id=%d, left=%s, right=%s" % (id, node.left, node.right))
+        if node.left: 
+            print("  DBG: left=%d" % node.left.id) 
+        else: 
+            print("  DBG: left=none") 
+        if node.right: 
+            print("  DBG: right=%d" % node.right.id) 
+        else: 
+            print("  DBG: right=none") 
+
+def debug_depthmap(depth_map):
+    print("##### debug_depthmap #####")
+    for (h, nodes) in depth_map.items():
+        print("DBG: depth h= %d, # of nodes=%d" % (h, len(nodes)))
+        for node in nodes:
+            print("  DBG: node id=%d" % (node.id))
+ 
+def debug_seq(seq):
+    print("????? debug_seq() length=%d?????" % len(seq))
+    for id in seq:
+        print("  %d" % id)
+
+
 // C++
  struct Node {
      Node *left;

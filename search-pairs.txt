@@ -1,0 +1,30 @@
+#!/bin/python3
+
+# If each integer arr[i] is not unique.
+from collections import Counter
+def pairs(k, arr):
+    counter = Counter(arr)
+    pairs =0
+    for num in arr:
+        pairs += counter[num + k]
+    return pairs
+
+# If each integer arr[i] is unique.
+def pairs(k, arr):
+    return len(set(arr) & set([i + k for i in arr])
+
+// C++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<string> split_string(string);
+
+// Complete the pairs function below.
+int pairs(int k, vector<int> arr) {
+    unordered_map<int,int> cnt;
+    for (auto n : arr) cnt[k + n]++;
+    int num_pairs = 0;
+    for (auto n: arr) num_pairs += cnt[n];
+    return num_pairs;
+}

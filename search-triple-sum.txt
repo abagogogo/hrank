@@ -1,0 +1,22 @@
+// C++
+void sort_unique(const vector<int> &input, vector<int> &output) {
+    set<int> unique(input.begin(), input.end());
+    output.assign(unique.begin(), unique.end());
+}
+
+long triplets(vector<int> a, vector<int> b, vector<int> c) {
+    vector<int> sa, sb, sc;
+    sort_unique(a, sa);
+    sort_unique(b, sb);
+    sort_unique(c, sc);
+
+    auto ita = sa.begin();
+    auto itc = sc.begin();
+    long cnt = 0;
+    for (auto key : sb) {
+       ita = upper_bound(ita, sa.end(), key);
+       itc = upper_bound(itc, sc.end(), key);
+       cnt += (ita - sa.begin()) * (itc - sc.begin());
+    }   
+    return cnt;
+}

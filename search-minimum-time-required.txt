@@ -1,0 +1,16 @@
+// C++
+long minTime(vector<long> machines, long goal) {
+    long max_day = *max_element(machines.begin(), machines.end());
+    long left = 1;
+    long right = max_day  * goal;
+    while (left < right) {
+        long mid = left + (right - left) / 2;
+        long sum = 0;
+        for (auto m : machines) sum += mid / m;
+        if (sum < goal) 
+            left = mid + 1;
+        else
+            right = mid;
+    }
+    return left;
+}

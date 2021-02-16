@@ -1,3 +1,10 @@
+#!/bin/python3
+
+from bisect import bisect
+def trplets(a, b, c):
+    a, b, c = sorted(set(a)), set(b), sorted(set(c))
+    return sum(bisect(a, x) * bisect(c, x) for x in b)
+
 // C++
 void sort_unique(const vector<int> &input, vector<int> &output) {
     set<int> unique(input.begin(), input.end());

@@ -1,3 +1,16 @@
+#!/bin/python3
+
+def minTime(machines, goal):
+    left = goal // len(machines)
+    right = max(machines) * goal
+    while left < right:
+        mid = left + (right - left) // 2
+        if sum(mid // m for m in machines) < goal:
+            left = mid + 1
+        else:
+            right = mid
+    return left
+
 // C++
 long minTime(vector<long> machines, long goal) {
     long max_day = *max_element(machines.begin(), machines.end());

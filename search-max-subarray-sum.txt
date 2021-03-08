@@ -1,0 +1,37 @@
+#!/bin/python3
+
+import bisect
+def maximumSum(a, m):
+    if (len(a) <= 0): return 0
+    b = [n % m for n in a]
+    max_sum = b[0]
+    c=[max_sum]
+    
+    for j in range(1, len(b)):
+        b[j] =  (b[j-1] + b[j]) % m
+        max_sum = max(max_sum, b[j])
+        i = bisect.bisect(c, b[j])
+        if i < len(c):
+            max_sum = max(max_sum, ( b[j] - c[i] + m) %  m)
+        bisect.insort(c, b[j])
+    return max_sum 
+
+// C++
+long maximumSum(vector<long> a, long m) {
+    vector<long> prefix_sum(a.size(), 0);
+    prefix_sum[0] = a[0] % m;
+    for (int i = 1; i < a.size(); ++i)
+        prefix_sum[i] = (prefix_sum[i-1] + a[i]) % m;
+    
+    long max_sum = prefix_sum[0];
+    set<long> tree;
+    tree.insert(prefix_sum[0]);
+    for (int i = 1; i < prefix_sum.size(); ++i) {
+        auto it = tree.upper_bound(prefix_sum[i]);
+        max_sum = max((prefix_sum[i] - *it + m) % m, max_sum);
+        max_sum = max(prefix_sum[i], max_sum);
+        tree.insert(prefix_sum[i]);
+    }
+    return max_sum;
+}
+

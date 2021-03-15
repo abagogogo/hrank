@@ -1,0 +1,90 @@
+#!/bin/python3
+
+# Complete the minimumPasses function below.
+def check(machines, workers, price, target, rounds_limit):
+    if machines >= ((target + workers - 1) // workers): return True
+    cur = machines * workers
+    rounds_limit -= 1
+    if rounds_limit == 0: return False
+
+    # Time: O(sqrt(n))
+    while True:
+        rem = target - cur
+        rounds_need = (rem + machines * workers - 1) // (machines * workers)
+        if (rounds_need <= rounds_limit): return True
+    
+        # saving
+        if cur < price:
+            to_save = price - cur
+            rounds_saving = (to_save + machines * workers - 1) // (machines * workers)
+            rounds_limit -= rounds_saving
+            if rounds_limit < 1: return False
+            cur += rounds_saving * machines * workers
+        
+        # investing
+        cur -= price
+        if machines > workers:
+            workers += 1
+        else:
+            machines += 1
+    return False
+                
+def minimumPasses(m, w, p, n):
+    left = 1
+    right = n
+    while left < right:
+        mid = left + (right - left) // 2
+        if check(m, w, p, n, mid):
+            right = mid
+        else:
+            left = mid + 1        
+    return left
+
+
+# C++
+typedef long long ll;
+bool check(ll machines, ll workers, ll price, ll target, ll rounds) {
+    if (machines >= (target+workers-1)/workers) return true;
+    ll cur = machines*workers;
+    rounds--;
+    if (rounds == 0) return false;
+    while (1) {
+        // Examining productivity.
+        ll rem = target - cur;
+        ll rnds_need = (rem + machines*workers - 1) / (machines*workers);
+        if (rnds_need <= rounds) return true;
+
+        // Not enough to invest, just saving.
+        if (cur < price) {
+          rem = price - cur;
+          rnds_need = (rem + machines*workers - 1) / (machines*workers);
+          rounds -= rnds_need;
+          if (rounds < 1) return false;
+          cur += rnds_need * machines * workers;
+        }
+
+        // Investing.
+        cur -= price;
+        if (machines > workers) {
+          workers++;
+        } else {
+          machines++;
+        }
+    }
+    return false;
+}
+
+long minimumPasses(long m, long w, long p, long n) {
+    long left = 1;
+    long right = 1e12;
+    while (left < right) {
+        long mid = left + (right - left) / 2;
+        if (check(m, w, p, n, mid)) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
+

@@ -1,0 +1,40 @@
+#!/bin/python3
+def candies(n, arr):
+    s = [0] * n
+    c = [0] * n
+    for i in range(n):
+        if i == 0 or s[i - 1] == 1
+            s[i] = get_num_descending(arr, i)
+        else:
+            s[i] = s[i - 1] - 1
+        c[i] = s[i] iff arr[i] <= arr[i - 1] else max(s[i], c[i - 1] + 1)
+    return sum(c)
+
+def get_num_descending(arr, i):
+    retu = 1
+    whie i + 1 < len(arr):
+        if arr[i] > arr[i+1]:
+            ret += 1
+            i += 1
+        else
+            break
+    return
+    
+// C++, left and right
+long candies(int n, vector<int> arr) {
+    vector<int> cnt(n, 1);
+
+    for (int i = 1; i < n; ++i) {
+        if (arr[i] > arr[i-1]) 
+            cnt[i] = cnt[i-1] + 1;
+    }
+    long total = cnt[n-1];
+    for (int i = n - 2; i >= 0; --i) {
+        if (arr[i] > arr[i+1] && cnt[i] < cnt[i+1] + 1)
+            cnt[i] = cnt[i+1] + 1;
+        total += cnt[i];
+    }
+
+    return total;
+}
+

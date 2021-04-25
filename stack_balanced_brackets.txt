@@ -1,0 +1,40 @@
+#!/bin/python3
+
+opens = '{[('
+closes = '}])'
+matched = { a:b for a,b in zip(closes,opens)}
+
+def isBalanced(s):
+    stack = []
+    for ch in s:
+        if ch in opens:
+            stack.append(ch)
+        elif not stack or stack.pop() != matched[ch]:
+            return 'NO'            
+    return 'YES' if not stack else 'NO'
+
+// C++
+bool is_open(char ch) {
+    return ch == '{' || ch == '[' || ch == '(';
+}
+
+bool is_matched(char open, char close) {
+    if (open == '{') return close == '}';
+    else if (open == '[') return close == ']';
+    else if (open == '(') return close == ')';
+    else return false;
+}
+
+string isBalanced(string s) {
+    vector<char> opens;
+    for (auto ch : s) {
+        if (is_open(ch)) {
+            opens.push_back(ch);
+        } else {
+            if (opens.empty() || !is_matched(opens.back(), ch))
+                return "NO";
+            opens.pop_back();
+        }
+    }
+    return opens.empty() ? "YES" : "NO";
+}

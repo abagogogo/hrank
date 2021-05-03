@@ -1,0 +1,57 @@
+#!/bin/python3
+class MyQueue(object):
+    def __init__(self):
+        self.new_stack = []
+        self.old_stack = []    
+    
+    def peek(self):
+        self.move()
+        return self.old_stack[-1]
+        
+    def pop(self):
+        self.move()
+        return self.old_stack.pop()
+        
+    def put(self, value):
+        self.new_stack.append(value)
+    
+    def move(self):
+        if self.old_stack:
+            return
+        while self.new_stack:
+            self.old_stack.append(self.new_stack.pop())
+
+// C++
+class MyQueue {
+  
+    public:
+        stack<int> stack_newest_on_top, stack_oldest_on_top;   
+        void push(int x) {
+            stack_newest_on_top.push(x);
+        }
+
+        void pop() {
+            move();
+            if (!stack_oldest_on_top.empty()) {
+                stack_oldest_on_top.pop();
+            }
+        }
+
+        int front() {
+            move();
+            if (!stack_oldest_on_top.empty()) {
+                return stack_oldest_on_top.top();
+            } else {
+                return 0;
+            }
+        }
+
+        void move() {
+            if (!stack_oldest_on_top.empty()) return;
+            
+            while (!stack_newest_on_top.empty()) {
+                stack_oldest_on_top.push(stack_newest_on_top.top());
+                stack_newest_on_top.pop();
+            }
+        }
+};

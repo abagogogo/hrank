@@ -1,0 +1,50 @@
+// C++
+vector<long> riddle(vector<long> arr) {
+    // complete this function
+    int n = arr.size();
+
+    // Arrays to store index of previous and next smaller values.
+    vector<int> left(n, -1);
+    vector<int> right(n, n); 
+
+    // Stack used to find previous and next smaller value.
+    // Value >= key (arr[i]) will be poped.
+    stack<int> s;
+
+    // Fill elements of left[].
+    for (int i = 0; i < n; ++i) {
+        while (!s.empty() && arr[s.top()] >= arr[i]) {
+            s.pop();
+        }   
+        if (!s.empty()) left[i] = s.top();
+        s.push(i);
+    }
+
+    // Fill elements of right[].
+    while (!s.empty()) s.pop();
+    for (int i = n - 1; i >= 0; --i) {
+        while (!s.empty() && arr[s.top()] >= arr[i]) {
+            s.pop();
+        }   
+        if (!s.empty()) right[i] = s.top();
+        s.push(i);
+    }   
+
+    // We can use left[] and right[] to construct window of each value, 
+    // as a local maximal, spans. Then figure out length of all window sizes.
+    vector<long> ans(n + 1, 0); 
+    for (int i = 0; i < n; ++i) {
+        int window = right[i] - left[i] - 1;
+        ans[window] = max(arr[i], ans[window]);
+    }   
+
+    // Some entries in answer[] may not be filled.
+    // Fill them by the property that ans[window] >= ans[window + 1]
+    for (int window = n - 1; window >= 1; --window) {
+        ans[window] = max(ans[window], ans[window + 1]); 
+    }   
+
+    // Discard window=0 case.
+    ans.erase(ans.begin());
+    return ans;
+}

@@ -1,0 +1,52 @@
+// Python: TODO
+
+// C++
+using Pos=pair<int,int>;
+
+string pos_to_string(Pos &p) {
+    return to_string(p.first)+","+to_string(p.second);
+}
+
+void get_neighbors(Pos &cur, vector<string> &grid, vector<Pos> &list) {    
+    static vector<vector<int>> dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    int size = grid.size();
+    for (auto dir : dirs) {
+        for (int s = 1; s < size; ++s) {
+            int nx = cur.first + dir[0] * s;
+            int ny = cur.second + dir[1] * s;            
+            if (nx >= 0 && nx < size && ny >= 0 && ny < size && grid[nx][ny] == '.') {
+                list.push_back(make_pair(nx, ny));
+            } else {
+                break;
+            }
+        }
+    }
+}
+
+int minimumMoves(vector<string> grid, int startX, int startY, int goalX, int goalY) {
+    unordered_map<string, int> visited;
+    queue<Pos> q;
+    Pos start = make_pair(startX, startY);
+    Pos goal = make_pair(goalX, goalY);
+    
+    if (start == goal) return 0;
+    q.push(start);    
+    visited[pos_to_string(start)] = 0;
+    
+    while (!q.empty()) {
+        auto curr = q.front(); q.pop();
+        int dist = visited[pos_to_string(curr)];
+
+        vector<Pos> list;
+        get_neighbors(curr, grid, list);
+        for (auto next : list) {
+            string key = pos_to_string(next);
+            if (visited.find(key) == visited.end()) {                
+                if (next == goal) return dist + 1;                
+                q.push(next);
+                visited[key] = dist + 1;
+            }
+        }
+    }
+    return -1;
+}

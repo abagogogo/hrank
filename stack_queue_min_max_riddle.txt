@@ -13,7 +13,7 @@ def riddle(arr):
         stack.append(i)
         
     stack = []
-    for i in range(n-1, -1, -1):    
+    for i in reverse(range(n)): # or range(n-1, -1, -1):
         while stack and arr[stack[-1]] >= arr[i]:
             stack.pop()
         if stack:
@@ -24,7 +24,7 @@ def riddle(arr):
     for i in range(n):
         window = right[i] - left[i] - 1
         ans[window] = max(arr[i], ans[window])    
-    for window in range(n-1, -1, -1):
+    for window in reverse(range(n)): # or range(n-1, -1, -1):
         ans[window] = max(ans[window], ans[window + 1])    
     ans.pop(0)
     return ans

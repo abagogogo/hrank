@@ -1,5 +1,54 @@
-// Python: TODO
+#!/bin/python3
 
+def isValid(pos, grid):    
+    #if [0, 0] <= nextMove < dims:
+    
+    if pos[0] >= 0 and pos[0] < len(grid) and pos[1] >= 0 and pos[1] < len(grid[0]):
+        if grid[pos[0]][pos[1]] == '.':
+            return True
+    return False
+
+def toKey(pos):
+    return "%d.%d" % (pos[0], pos[1])
+
+def minimumMoves(grid, startX, startY, goalX, goalY):
+    moves = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+    start = [startX, startY]
+    goal = [goalX, goalY]
+    
+    visited = {toKey(start): 0}
+    q = [start[:]] # insert a copy of start[]
+    while len(q) > 0:
+        cur, q = q[0], q[1:]
+        dist = visited[toKey(cur)]
+        
+        for move in moves:
+            nextMove = cur[:]
+            while True:
+                nextMove[0] = nextMove[0] + move[0]
+                nextMove[1] = nextMove[1] + move[1]
+                if not isValid(nextMove, grid): 
+                    break
+                if nextMove == goal:
+                    return dist + 1
+                if toKey(nextMove) not in visited:
+                    visited[toKey(nextMove)] = dist + 1
+                    q.append(nextMove[:]) # insert a copy of nextMove[]
+    return -1
+
+def test(ans, exp):
+    if ans == exp:
+        print("[PASS] ans = %d" % (ans))
+    else:
+        print("[FAIL] ans = %d, exp = %d" % (ans, exp))
+
+if __name__ == '__main__':
+    grid = []
+    grid.append(".x.")
+    grid.append(".x.")
+    grid.append("...")
+    n = minimumMoves(grid, 0, 0, 0, 2)
+    test(n, 3)
 // C++
 using Pos=pair<int,int>;
 

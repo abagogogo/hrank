@@ -1,0 +1,32 @@
+// C++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int poisonousPlants(vector<int> p) {
+    int n = p.size();
+    vector<int> killer(n, -1); // Who kills plant i. -1: n/a.
+    vector<int> killcount(n, 0); // How man plants killed by plant i.
+    vector<int> daycount(n, -1); // How long plant i exist. <0: forever.
+    stack<int> s; // Plants that could kill current plant.
+
+    for (int i = 0; i < n; ++i) {
+        // Pop out plants that are not kill current one,
+        // and which can be discard as they won't affect 
+        // coming plants (platns on the rgith).
+        while (!s.empty() && p[s.top()] >= p[i]) s.pop();
+
+        if (!s.empty()) {
+            killer[i] = s.top();
+            ++killcount[s.top()];
+            daycount[i] = killcount[s.top()]; 
+            --daycount[s.top()];
+            if (killer[s.top()] >= 0 && daycount[s.top()] <= 0)
+                s.pop();
+        }
+
+        s.push(i);
+    }   
+
+    return *max_element(killcount.begin(), killcount.end());
+}

@@ -6,14 +6,14 @@ using namespace std;
 int poisonousPlants(vector<int> p) {
     int n = p.size();
     vector<int> killer(n, -1); // Who kills plant i. -1: n/a.
-    vector<int> killcount(n, 0); // How man plants killed by plant i.
-    vector<int> daycount(n, -1); // How long plant i exist. <0: forever.
+    vector<int> killcount(n, 0); // How many plants killed by plant i.
+    vector<int> daycount(n, -1); // How long does plant i exist. <0: forever.
     stack<int> s; // Plants that could kill current plant.
 
     for (int i = 0; i < n; ++i) {
         // Pop out plants that are not kill current one,
         // and which can be discard as they won't affect 
-        // coming plants (platns on the rgith).
+        // coming plants (platns on the right).
         while (!s.empty() && p[s.top()] >= p[i]) s.pop();
 
         if (!s.empty()) {
@@ -30,3 +30,29 @@ int poisonousPlants(vector<int> p) {
 
     return *max_element(killcount.begin(), killcount.end());
 }
+
+#!/bin/python3
+
+def top(stack):
+    return stack[-1]
+
+def poisonousPlants(plants):
+    n = len(plants)
+    killer = [-1] * n 
+    killcount = [0] * n 
+    daycount = [-1] * n 
+    stack = []
+
+    for i, p in enumerate(plants):
+        while len(stack) > 0 and plants[top(stack)] >= p:            
+            stack.pop()
+            
+        if len(stack) > 0:
+            killer[i] = top(stack)
+            killcount[top(stack)] += 1
+            daycount[i] = killcount[top(stack)]            
+            daycount[top(stack)] -= 1
+            if killer[top(stack)] > 0 and daycount[top(stack)] <= 0:
+                stack.pop()                
+        stack.append(i)
+    return max(killcount)

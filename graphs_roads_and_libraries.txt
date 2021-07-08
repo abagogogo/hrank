@@ -9,6 +9,7 @@
 #  3. INTEGER c_road
 #  4. 2D_INTEGER_ARRAY cities
 #
+# Python - DFS
 from collections import defaultdict
 from collections import deque
 
@@ -56,6 +57,86 @@ def roadsAndLibraries(n, c_lib, c_road, cities):
         g.edges[a].add(b)
         g.edges[b].add(a)
     nc, cs = count_clusters(g)
+    
+    return min(c_lib * n, c_lib * nc + sum((x - 1) * c_road for x in cs))
+
+# Python - Union by rank and path compression.
+# Time complexity is smaller than o(logn) and amortized time complexity is a small constant.
+class UnionRank:
+    def __init__(self, n):
+        self.n = n;
+        self.parent = list(range(n + 1))        
+        self.size = [0] * (n + 1)
+
+    def union(self, x, y):
+        x_root = self.find(x)
+        y_root = self.find(y)
+        if x_root == y_root: return
+
+        new_root = x_root if self.size[x_root] > self.size[y_root] else y_root
+        other_root = x_root if new_root == y_root else y_root
+        self.parent[other_root] = new_root
+        self.size[new_root] += self.size[other_root]
+
+    def find(self, x):
+        if self.parent[x] == x: return x
+        self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def sets(self):
+        sets = defaultdict(set)
+        for i in range(1, self.n + 1):
+            sets[self.find(i)].add(i)
+        return sets.values()
+
+def roadsAndLibraries(n, c_lib, c_road, cities):
+    # Write your code here
+    ur = UnionRank(n)
+    for a,b in cities:
+        ur.union(a, b)    
+    total = 0
+    for c in ur.sets():
+        k = len(c)
+        total += min(k * c_lib, (k-1)* c_road + c_lib)
+    return  total
+
+
+
+    def __init__(self, n):
+        self.n = n;
+        self.parent = range(n + 1)
+        self.rank = [1] * (n + 1)
+        self.size = [0] * (n + 1)
+
+    def union(self, x, y):
+        x_root = self.find(x)
+        y_root = self.find(y)
+        if x_root == y_root): return
+
+        new_root = x_root if self.rank[x_root] > self.rank[y_root] else y_root
+        other_root = y_root if new_root == x_root else y_root
+        self.parent[other_root] = new_root
+        slef.size[new_root] += self.size[other_root]
+        if self.rank[x_root] == self.rank[y_root]:
+            self.rank[new_root] += 1
+
+    def find(self, x):
+        if self.parent[x] == x: return x
+        self.parent[x] = find(self, self.parent[x])
+
+    def count_clusters(self):
+        sets = defaultdict(set)
+        for i in range(1, self.n + 1):
+            sets[self.find(i)].add(i)
+        return len(sets), [len(s) for s in sets]
+
+def roadsAndLibraries(n, c_lib, c_road, cities):
+    # Write your code here
+    g = Graph()
+    ur = UnionRank(n)
+    for a,b in cities:
+        ur.union(a, b)
+    nc, cs = ur.count_clusters()
     
     return min(c_lib * n, c_lib * nc + sum((x - 1) * c_road for x in cs))
 

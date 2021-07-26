@@ -1,0 +1,96 @@
+// C++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Graph {
+    protected:
+        unordered_map<int,vector<int>> adj_lists;
+        unordered_map<int,int> dist;
+
+    public:
+        Graph(int n) {
+            for (int i = 0; i < n; ++i) {
+                adj_lists[i] = {};                
+            }
+        }
+    
+        void add_edge(int u, int v) {
+            adj_lists[u].push_back(v);
+            adj_lists[v].push_back(u);
+        }
+    
+        vector<int> shortest_reach(int start) {
+            queue<int> q;
+
+            dist[start] = 0;
+            q.push(start);
+            while (!q.empty()) {
+                int curr = q.front(); q.pop();
+                for (int next : adj_lists[curr]) {
+                    if (dist.find(next) == dist.end()) {
+                        dist[next] = dist[curr] + 6;
+                        q.push(next);
+                    }
+                }
+            }
+
+            vector<int> res;
+            for (int i = 0; i < adj_lists.size(); ++i) {                
+                if (dist.find(i) != dist.end()) {
+                    res.push_back(dist[i]);
+                } else {
+                    res.push_back(-1);
+                }
+            }
+            return res;
+        }
+    
+};
+
+#!/bin/python3
+
+import queue
+from collections import defaultdict
+
+class Graph:
+    def __init__(self, n): 
+        self.n = n 
+        self.edges = defaultdict(lambda: []) 
+
+    def connect(self, x, y): 
+        self.edges[x].append(y)
+        self.edges[y].append(x) 
+
+    def find_all_distances(self, root):
+        dist = [-1 for i in range(self.n)]
+        visited = set()
+        q = queue.Queue()
+
+        dist[root] = 0 
+        visited.add(root)
+        q.put(root)
+
+        while not q.empty():
+            curr = q.get()
+            neighbors = self.edges[curr]
+            for n in neighbors:
+                if n not in visited:
+                    dist[n] = dist[curr] + 6 
+                    visited.add(n)
+                    q.put(n)
+
+        dist.pop(root)
+        print(" ".join(map(str, dist)))
+
+        
+t = int(input())
+for i in range(t):
+    n,m = [int(value) for value in input().split()]
+    graph = Graph(n)
+    for i in range(m):
+        x,y = [int(x) for x in input().split()]
+        graph.connect(x-1,y-1) 
+    s = int(input())
+    graph.find_all_dist(s-1)
+

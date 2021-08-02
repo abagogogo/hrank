@@ -1,0 +1,46 @@
+// C++
+using MAT_I=vector<vector<int>>;
+using MAT_B=vector<vector<bool>>;
+
+int is_valid_row(int r, MAT_I &grid) {
+    return r >= 0 && r < grid.size();
+}
+
+int is_valid_col(int c, MAT_I &grid) {
+    return c >= 0 && c < grid[0].size();
+}
+
+int dfs(int r, int c, MAT_I &grid, MAT_B &visited) {
+    if (visited[r][c]) return 0;
+    visited[r][c] = true;
+
+    if (grid[r][c] == 0) return 0;
+    int cnt = 1;
+    
+    for (int dr = -1; dr <= 1; ++dr) {
+        int next_r = r + dr; 
+        if (!is_valid_row(next_r, grid)) continue;
+
+        for (int dc = -1; dc <= 1; ++dc) {
+            int next_c = c + dc; 
+            if (!is_valid_col(next_c, grid)) continue;
+            cnt += dfs(next_r, next_c, grid, visited);
+        }
+    }   
+    return cnt;
+}
+
+int maxRegion(vector<vector<int>> grid) {
+    int rows = grid.size();
+    int cols = grid[0].size();
+    MAT_B visited(rows, vector<bool>(cols, false));
+    int max_region = 0;
+
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
+            int region = dfs(r, c, grid, visited);
+            max_region = max(region, max_region);
+        }
+    }   
+    return max_region;
+}

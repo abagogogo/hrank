@@ -89,3 +89,67 @@ int minTime(vector<vector<int>> roads, vector<int> machines) {
     return cost;
 }
 
+#!/bin/python3
+
+class Node:
+    def __init__(self, id):
+        self.id = id
+        self.parent = self
+        self.is_machine = False
+
+class Graph:
+    def __init__(self, roads, machines):
+        self.nodes = {}
+        self.edges = roads
+
+        for src, dst, _ in roads:
+            self.nodes[src] = Node(src)
+            self.nodes[dst] = Node(dst)
+        for m in machines:
+            u = self.get_node(m)
+            u.is_machine = True            
+        self.edges.sort(key=lambda x: x[2], reverse=True)          
+    
+    def get_node(self, id):
+        return self.nodes[id]
+    
+    def find_set(self, node):
+        if node.parent == node: return node
+        node.parent = self.find_set(node.parent)
+        return node.parent
+    
+    def union_set(self, id_u, id_v):
+        node_u = self.get_node(id_u)
+        node_v = self.get_node(id_v)
+        pu = self.find_set(node_u)
+        pv = self.find_set(node_v)
+        if pu.is_machine:
+            pv.parent = pu
+        else:
+            pu.parent = pv
+    
+    def with_machine(self, id):
+        u = self.get_node(id)
+        pu = self.find_set(u)
+        return pu.is_machine
+           
+#
+# Complete the 'minTime' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts following parameters:
+#  1. 2D_INTEGER_ARRAY roads
+#  2. INTEGER_ARRAY machines
+#
+def minTime(roads, machines):
+    g = Graph(roads, machines)
+    cost = 0
+    for edge in g.edges:
+        u = edge[0]
+        v = edge[1]
+        weight = edge[2]
+        if g.with_machine(u) and g.with_machine(v):
+            cost += weight
+        else:
+            g.union_set(u, v)
+    return cost

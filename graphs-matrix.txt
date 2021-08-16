@@ -1,0 +1,91 @@
+// C++
+#include <bits/stdc++>
+
+using namespace std;
+
+struct Node {
+    int id; 
+    bool is_machine;
+    Node *parent;
+    
+    Node(int a_id) {
+        id = a_id;
+        is_machine = false;
+        parent = this;
+    }
+};  
+
+class Graph {
+
+public:
+    Graph(vector<vector<int>> &roads, vector<int> &machines) {
+        for (int ei = 0; ei < (int)roads.size(); ++ei) {
+            _nodes[roads[ei][0]] = new Node(roads[ei][0]);
+            _nodes[roads[ei][1]] = new Node(roads[ei][1]);
+            _edges.push_back(make_pair(roads[ei][2], ei)); 
+        }
+        for (auto m : machines) {
+            get_node(m)->is_machine = true;
+        }
+        sort(_edges.begin(), _edges.end());
+    }   
+
+    Node *get_node(int id) {
+        if (_nodes.find(id) == _nodes.end()) {
+            _nodes[id] = new Node(id);
+        }
+        return _nodes[id];
+    }   
+
+    Node *find_set(Node *n) {
+        if (n->parent == n) return n;
+        n->parent = find_set(n->parent);
+        return n->parent;
+    }   
+    
+    void union_set(Node *u, Node *v) {
+        Node *pu = find_set(u);
+        Node *pv = find_set(v);
+    
+        if (pu->is_machine) {
+            pv->parent = pu;
+        } else {
+            pu->parent = pv;
+        }
+    }
+
+    vector<pair<int, int>> &get_edges() {
+        return _edges;
+    }
+
+protected:
+    unordered_map<int, Node*> _nodes; // id -> node
+    vector<pair<int, int>> _edges;    // (weight, index to roads[])
+};
+
+/*
+ * Complete the 'minTime' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts following parameters:
+ *  1. 2D_INTEGER_ARRAY roads
+ *  2. INTEGER_ARRAY machines
+ */
+int minTime(vector<vector<int>> roads, vector<int> machines) {
+    Graph g(roads, machines);
+    int cost = 0;
+    auto edges = g.get_edges();
+    for (auto it = edges.rbegin(); it != edges.rend(); ++it) {
+        int weight = it->first;
+        int ei = it->second;
+        Node *u = g.get_node(roads[ei][0]);
+        Node *v = g.get_node(roads[ei][1]);
+        if (g.find_set(u)->is_machine && g.find_set(v)->is_machine) {
+            cost += weight;
+        } else {
+            g.union_set(u, v);
+        }
+    }
+    return cost;
+}
+

@@ -1,16 +1,13 @@
 #!/bin/Python3
 
-def checkBST(root):    
-    return checkBSTRange(root, INT_MIN, INT_MAX)        
+def checkBST(root):
+    return check_range(root, float('-inf'), float('inf'))
 
-def checkBSTRange(root, minval, maxval):
-    if root == None: return True
-    
-    if minval < root.data < maxval:
-        return (checkBSTRange(root.left, minval, root.data) and 
-                checkBSTRange(root.right, root.data, maxval))
-    else:
-        return False
+def check_range(root, min_val, max_val):
+    if not root: return True
+    if root.data < min_val or root.data > max_val: return False
+    return check_range(root.left, min_val, root.data) and \
+        check_range(root.right, root.data, max_val)
 
 # C++
 #include <climits>

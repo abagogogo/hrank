@@ -54,28 +54,38 @@ def dfs_hidden(obj, already):
         self.left = None
         self.right = None
 """        
-
-# Enter your code here. Read input from STDIN. Print output to STDOUT
 def decodeHuff(root, s):
-    ans=''
+    decoded = ""
     curr = root
-    for i in range(len(s)):
-        curr = curr.left if(s[i] == '0') else curr.right
-        if curr.left== None and curr.right== None:
-            ans += curr.data
+    for i in range(len(s)):        
+        curr = curr.left if (s[i] == '0') else curr.right
+        if curr.data != '\0':
+            decoded += curr.data
             curr = root
-    print(ans)
+    print(decoded) 
 
-#C++
-void decode_huff(node *root, string s) {
-    string ans;
+# C++
+typedef struct node {
+    int freq;
+    char data;
+    node * left;
+    node * right;
+} node;
+
+bool is_leaf(node *n) {
+    return (n && !n->left && !n->right);
+}
+
+void decode_huff(node * root, string s) {
     node *curr = root;
-    for (auto ch : s) {
-        curr = (ch == '0') ? curr->left : curr->right;
-        if (!curr->left && !curr->right) {
-            ans += curr->data;
+    string decoded;
+
+    for (auto c : s) {
+        curr = (c == '0') ? curr->left : curr->right;
+        if (is_leaf(curr)) {
+            decoded += curr->data;
             curr = root;
         }
     }
-    cout << ans;
+    cout << decoded;
 }

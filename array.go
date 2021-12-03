@@ -18,3 +18,16 @@ func hourglassSum(arr [][]int32) int32 {
     }
     return maxSum
 }
+
+func rotateLeft(d int32, arr []int32) []int32 {
+    // Write your code here
+    n := len(arr)
+    for i := 0; i < int(d); i++ {
+      tmp := arr[0]
+      for j := 1; j < int(n); j++ {
+          arr[j-1] = arr[j]
+      }
+      arr[n-1] = tmp
+    }
+    return arr
+}

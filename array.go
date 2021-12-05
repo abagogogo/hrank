@@ -31,3 +31,23 @@ func rotateLeft(d int32, arr []int32) []int32 {
     }
     return arr
 }
+
+func count(q string, ss []string) int32 {
+    matched := int32(0)
+    for _, s := range ss {
+        if q == s {
+            matched++
+        }
+    }
+    return matched
+}
+
+func matchingStrings(ss []string, queries []string) []int32 {
+    // Write your code here
+    ans := make([]int32, len(queries))
+    for i, q := range queries {
+        ans[i] = count(q, ss)
+    }
+    return ans
+}
+

@@ -37,3 +37,22 @@ func insertHead(head *Node, data interface{}) {
     }
     return n
 }
+
+func insertNodeAtPosition(llist *SinglyLinkedListNode, data int32, position int32) *SinglyLinkedListNode {
+    n := &SinglyLinkedListNode{data: data, next: nil}
+
+    if position == 0 {
+        n.next = llist
+        return llist
+    }
+
+    prev := llist
+    for i := int32(1); i < position; i++ {
+        prev = prev.next
+    }
+    if prev != nil {
+        n.next = prev.next
+        prev.next = n
+    }
+    return llist
+}

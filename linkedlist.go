@@ -56,3 +56,26 @@ func insertNodeAtPosition(llist *SinglyLinkedListNode, data int32, position int3
     }
     return llist
 }
+
+func deleteNode(llist *SinglyLinkedListNode, position int32) *SinglyLinkedListNode {
+    if position == 0  {
+        return llist.next
+    }
+    if llist == nil {
+        return nil
+    }
+    prev := llist
+    for i := int32(1); i < position; i++ {
+        prev = prev.next
+    }
+    if prev.next != nil {
+        prev.next = prev.next.next
+    }
+    return llist
+}
+
+func reversePrint(llist *SinglyLinkedListNode) {
+    if llist == nil {return}
+    reversePrint(llist.next)
+    fmt.Println(llist.data)
+}

@@ -79,3 +79,42 @@ func reversePrint(llist *SinglyLinkedListNode) {
     reversePrint(llist.next)
     fmt.Println(llist.data)
 }
+
+func getNode(llist *SinglyLinkedListNode, positionFromTail int32) int32 {
+    // Write your code here
+    target, tail := llist, llist
+    for i := int32(0); i < positionFromTail; i++ {
+        tail = tail.next
+    }
+    for tail.next != nil {
+        tail = tail.next
+        target = target.next
+    }
+    return target.data
+}
+
+func getNode(llist *SinglyLinkedListNode, positionFromTail int32) int32 {
+    target, tail := llist, llist
+    for i := int32(0); tail.next != nil; i++ {
+        tail = tail.next
+        if i >= positionFromTail {
+            target = target.next
+        }
+    }
+    return target.data
+}
+
+func removeDuplicates(llist *SinglyLinkedListNode) *SinglyLinkedListNode {
+    if llist == nil || llist.next == nil {
+        return llist
+    }
+    for prev, curr := llist, llist.next; curr != nil; {
+        if curr.data > prev.data {
+            prev = prev.next
+        } else {
+            prev.next = curr.next
+        }
+        curr = curr.next
+    }
+    return llist
+}

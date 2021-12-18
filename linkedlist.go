@@ -74,6 +74,19 @@ func deleteNode(llist *SinglyLinkedListNode, position int32) *SinglyLinkedListNo
     return llist
 }
 
+func reverse(llist *SinglyLinkedListNode) *SinglyLinkedListNode {
+    // Write your code here
+    var newHead *SinglyLinkedListNode
+
+    for curr := llist; curr != nil; {
+        next := curr.next
+        curr.next = newHead
+        newHead = curr
+        curr = next
+    }
+    return newHead
+}
+
 func reversePrint(llist *SinglyLinkedListNode) {
     if llist == nil {return}
     reversePrint(llist.next)
@@ -117,4 +130,21 @@ func removeDuplicates(llist *SinglyLinkedListNode) *SinglyLinkedListNode {
         curr = curr.next
     }
     return llist
+}
+
+func sortedInsert(llist *DoublyLinkedListNode, data int32) *DoublyLinkedListNode {
+    switch {
+    case llist == nil:
+        return &DoublyLinkedListNode{data: data}
+    case data < llist.data:
+        n := &DoublyLinkedListNode{data: data}
+        llist.prev = n
+        n.next = llist
+        return n
+    default:
+        n := sortedInsert(llist.next, data)
+        n.prev = llist
+        llist.next = n
+        return llist
+    }
 }

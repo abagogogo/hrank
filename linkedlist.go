@@ -148,3 +148,16 @@ func sortedInsert(llist *DoublyLinkedListNode, data int32) *DoublyLinkedListNode
         return llist
     }
 }
+
+func reverse(llist *DoublyLinkedListNode) *DoublyLinkedListNode {
+    if llist == nil {
+        return nil
+    }
+
+    llist.next, llist.prev = llist.prev, llist.next
+    if llist.prev == nil {
+        return llist
+    } else {
+        return reverse(llist.prev)
+    }
+}

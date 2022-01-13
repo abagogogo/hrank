@@ -61,3 +61,29 @@ func equalStacks(h1 []int32, h2 []int32, h3 []int32) int32 {
     }
     return 0
 }
+
+func twoStacks(maxSum int32, a []int32, b []int32) int32 {
+    // Write your code here
+    var sum, numsA, numsB, maxNums int32
+
+    for _,n := range(a) {
+        if sum + n > maxSum {break}
+        sum += n
+        numsA++
+    }
+    maxNums = numsA
+
+    for _,n := range(b) {
+        for sum + n > maxSum && numsA > 0 {
+            numsA--;
+            sum -= a[numsA]
+        }
+        if sum + n > maxSum {break}
+        sum += n
+        numsB++
+        if numsA + numsB > maxNums {
+            maxNums = numsA + numsB
+        }
+    }
+    return maxNums
+}

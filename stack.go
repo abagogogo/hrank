@@ -87,3 +87,39 @@ func twoStacks(maxSum int32, a []int32, b []int32) int32 {
     }
     return maxNums
 }
+
+type Building struct {
+    height, left int32
+}
+
+func largestRectangle(h []int32) int64 {
+    var max_area int64
+
+    h = append(h, 0)
+    s := []Building{{h[0], 0}}
+
+    for i := (int32)(1); i < (int32)(len(h)); i++ {
+        switch {
+        case h[i-1] < h[i]:
+            s = append(s, Building{h[i], i})
+        case h[i - 1] > h[i]:
+            left := i
+            for len(s) > 0 && s[len(s)-1].height > h[i] {
+                top := s[len(s)-1]
+                left = top.left
+                area := (int64)(top.height) * (int64)(i - left)
+                max_area = max(max_area, area)
+                s = s[:len(s)-1]
+            }
+            s = append(s, Building{h[i], left})
+        }
+    }
+    return max_area
+}
+
+func max(a, b int64) int64 {
+    if a >= b {
+        return a
+    }
+    return b
+}

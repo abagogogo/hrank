@@ -123,3 +123,47 @@ func max(a, b int64) int64 {
     }
     return b
 }
+
+func poisonousPlants(p []int32) int32 {
+    n := len(p)
+    killer := make([]int, n)
+    killcount := make([]int, n)
+    daycount := make([]int, n)
+    var s []int
+
+    for i := 0; i < n; i++ {
+        killer[i] = -1
+    }
+    for i, curr := range p {
+        for len(s) > 0 && p[top(s)] >= curr {
+            s = pop(s)
+        }
+
+        if (len(s) > 0) {
+            killer[i] = top(s)
+            killcount[top(s)] += 1
+            daycount[i] = killcount[top(s)]
+            daycount[top(s)] -= 1
+            if killer[top(s)] >= 0 && daycount[top(s)] <= 0 {
+                s = pop(s)
+            }
+        }
+        s = push(s, i)
+    }
+
+    var maxDays int32
+    for _, days := range killcount {
+        if int32(days) > maxDays {
+            maxDays = int32(days)
+        }
+    }
+    return maxDays
+}
+
+func top(s []int) int {
+    return s[len(s)-1]
+}
+
+func push(s []int, i int) []int {
+    return append(s, i)
+}

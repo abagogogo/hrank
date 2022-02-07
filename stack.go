@@ -167,3 +167,51 @@ func top(s []int) int {
 func push(s []int, i int) []int {
     return append(s, i)
 }
+
+func waiter(number []int32, q int32) []int32 {
+    var ap, bp, tp, ans []int32
+
+    primes := sieveOfEratosthenes(10000)
+    tp = number
+    for i := int32(0); i < q; i++ {
+        p := primes[i]
+        //fmt.Printf("RJ_DBG: iteration=%d, p=%d\n", i, p)
+        for j := len(tp)-1; j >= 0; j-- {
+            n := tp[j]
+            //fmt.Printf("RJ_DBG: j=%d, n=%d\n", j, n)
+            if n % p == 0 {
+                bp = append(bp, n)
+            } else {
+                ap = append(ap, n)
+            }
+        }
+        //fmt.Printf("Before: ap=%v, bp=%v\n", ap, bp)
+        for j := len(bp)-1; j >= 0; j-- {
+            ans = append(ans, bp[j])
+        }
+        copy(tp, ap)
+        tp = tp[0:len(ap)]
+
+        ap = ap[:0]
+        bp = bp[:0]
+        //fmt.Printf("After: ap=%v, bp=%v, tp=%v, ans=%v\n", ap, bp, tp, ans)
+    }
+    for j := len(tp)-1; j >= 0; j-- {
+        ans = append(ans, tp[j])
+    }
+
+    return ans
+}
+
+// https://stackoverflow.com/questions/21854191/generating-prime-numbers-in-go/48700228
+func sieveOfEratosthenes(n int32) (primes []int32) {
+    notPrime := make([]bool, n)
+    for i := int32(2); i < n; i++ {
+        if notPrime[i] {continue}
+        primes = append(primes, i)
+        for k := i*i; k < n; k += i {
+            notPrime[k] = true
+        }
+    }
+    return
+}

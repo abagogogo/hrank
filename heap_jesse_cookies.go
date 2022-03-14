@@ -11,13 +11,10 @@ import (
 
 type Heap struct {
 	values []int32
-	index  map[int32]int32
 }
 
 func NewHeap(a []int32) *Heap {
 	h := &Heap{}
-	h.index = make(map[int32]int32)
-
 	for _, i := range a {
 		h.Insert(i)
 	}
@@ -45,8 +42,6 @@ func (h *Heap) heapify_up() {
 	parent := h.parent(curr)
 	for parent >= 0 && h.values[parent] > h.values[curr] {
 		h.values[parent], h.values[curr] = h.values[curr], h.values[parent]
-		h.index[h.values[parent]] = parent
-		h.index[h.values[curr]] = curr
 
 		curr = parent
 		parent = h.parent(parent)
@@ -67,33 +62,9 @@ func (h *Heap) heapify_down(i int32) {
 		val := h.values[i]
 		min_val := h.values[min_idx]
 		h.values[i], h.values[min_idx] = min_val, val
-		h.index[val] = min_idx
-		h.index[min_val] = i
+
 		h.heapify_down(min_idx)
 	}
-}
-
-func (h *Heap) find(v int32) int32 {
-	i, exist := h.index[v]
-	if exist == false {
-		return -1
-	}
-	return i
-}
-
-func (h *Heap) Delete(v int32) {
-	i := h.find(v)
-	if i < 0 {
-		return
-	}
-
-	last_idx := h.last()
-	last_val := h.values[last_idx]
-	h.values[i] = last_val
-	h.index[last_val] = i
-	h.values = h.values[:last_idx]
-	delete(h.index, v)
-	h.heapify_down(i)
 }
 
 func (h *Heap) Min() int32 {
@@ -102,7 +73,6 @@ func (h *Heap) Min() int32 {
 
 func (h *Heap) Insert(v int32) {
 	h.values = append(h.values, v)
-	h.index[v] = h.last()
 	h.heapify_up()
 }
 
@@ -112,10 +82,9 @@ func (h *Heap) Pop() int32 {
 
 	last_idx := h.last()
 	last_val := h.values[last_idx]
+
 	h.values[i] = last_val
-	h.index[last_val] = i
 	h.values = h.values[:last_idx]
-	delete(h.index, v)
 	h.heapify_down(i)
 	return v
 }

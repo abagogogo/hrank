@@ -15,11 +15,10 @@ def sockMerchang(n, ar):
 
 # C++
 int sockMerchant(int n, vector<int> ar) {
-    map<int, int> counter;
+    map<int,int> counter;
     int pairs = 0;
+    
     for (auto color : ar) counter[color] += 1;
-    for (auto it = counter.begin(); it != counter.end(); ++it) {
-        pairs += it->second / 2;
-    }
+    for (auto [_color, count] : counter) pairs += count / 2;
     return pairs;
 }

@@ -91,9 +91,9 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
         int num_cities = dfs(graph, it->first, visited);
         if (num_cities > 0) {
             if (c_lib < c_road) {
-                cost += long(num_cities) * (long)c_lib;
+                cost += static_cast<long>(num_cities) * c_lib;
             } else {
-                cost += (long)(num_cities - 1) * (long)c_road + (long)c_lib;
+                cost += static_cast<long>(num_cities - 1) * c_road + c_lib;
             }
         }
     }
